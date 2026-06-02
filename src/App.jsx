@@ -1069,7 +1069,7 @@ body{margin:0}
 .page{
   position:relative; background:var(--bg); color:var(--ink);
   font-family:var(--font-body); font-size:17px; line-height:1.6;
-  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  padding-top:68px; overflow-x:hidden; -webkit-font-smoothing:antialiased;
 }
 img{max-width:100%}
 a{color:inherit;text-decoration:none}
@@ -1113,7 +1113,7 @@ ul{margin:0;padding:0;list-style:none}
 .btn--ghost:hover{color:var(--ink)}
 
 /* ---- nav ---- */
-.nav{position:sticky; top:0; z-index:50; transition:background .25s, border-color .25s, backdrop-filter .25s; border-bottom:1px solid transparent}
+.nav{position:fixed; top:0; left:0; right:0; z-index:50; transition:background .25s, border-color .25s, backdrop-filter .25s; border-bottom:1px solid transparent}
 .nav--solid{background:rgba(10,11,13,.82); backdrop-filter:blur(14px); border-bottom-color:var(--line)}
 .nav__inner{display:flex; align-items:center; justify-content:space-between; height:68px}
 .logo{font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-.5px}
