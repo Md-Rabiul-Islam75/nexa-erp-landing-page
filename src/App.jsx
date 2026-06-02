@@ -514,46 +514,17 @@ function Hero() {
 
 /* Animated product dashboard mock — pure CSS/SVG, no images. */
 function DashboardMock() {
-  const bars = [42, 58, 35, 72, 64, 88, 76]
   return (
-    <div className="dash" role="img" aria-label="NexaERP dashboard preview showing KPIs, a revenue chart and live activity">
-      <div className="dash__glow" aria-hidden="true" />
-      <div className="dash__chrome">
-        <span className="dot" /><span className="dot" /><span className="dot" />
-        <span className="dash__url">app.nexaerp.com / dashboard</span>
-      </div>
-
-      <div className="dash__body">
-        <div className="dash__kpis">
-          <Kpi label="Cash position" value="৳4.82 Cr" trend="+6.4%" up />
-          <Kpi label="Receivables (90d)" value="৳1.13 Cr" trend="−12%" />
-          <Kpi label="Stock accuracy" value="98.4%" trend="+0.7%" up />
-        </div>
-
-        <div className="dash__chart">
-          <div className="dash__chart-head">
-            <span>Revenue · last 7 months</span>
-            <span className="dash__chart-tag">Live</span>
+    <div className="dash dash--showcase" role="img" aria-label="NexaERP dashboard preview">
+      <div className="dash__stage">
+        <div className="dash__glow" aria-hidden="true" />
+        <div className="dash__shell">
+          <div className="dash__chrome">
+            <span className="dot" /><span className="dot" /><span className="dot" />
           </div>
-          <div className="dash__bars">
-            {bars.map((h, i) => (
-              <span key={i} className="dash__bar" style={{ '--h': `${h}%`, animationDelay: `${0.4 + i * 0.08}s` }} />
-            ))}
+          <div className="dash__screen">
+            <img src="/images/nexa-erp-dashboard.png" alt="NexaERP dashboard screenshot" className="dash__screen-img" />
           </div>
-        </div>
-
-        <div className="dash__feed">
-          {[
-            ['GRN #4821 posted', 'Inventory · just now'],
-            ['Mushak 6.3 generated', 'VAT · 2 min ago'],
-            ['PO #1190 approved', 'Mobile · 5 min ago'],
-          ].map(([t, m], i) => (
-            <div key={i} className="dash__row" style={{ animationDelay: `${0.9 + i * 0.18}s` }}>
-              <span className="dash__row-dot" />
-              <span className="dash__row-text">{t}</span>
-              <span className="dash__row-meta">{m}</span>
-            </div>
-          ))}
         </div>
       </div>
     </div>
@@ -677,6 +648,11 @@ function Video() {
               className="video__poster"
               onClick={() => hasVideo && setPlaying(true)}
               aria-label={hasVideo ? 'Play product tour' : 'Product tour video — add an embed URL in the VIDEO constant'}
+              style={{
+                backgroundImage: "linear-gradient(160deg,var(--bg-2),var(--bg)), url('/images/nexa-erp-dashboard.png')",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
             >
               {/* Faux dashboard backdrop so the poster looks alive even before a real video is added */}
               <div className="video__poster-bg" aria-hidden="true">
@@ -1144,9 +1120,9 @@ ul{margin:0;padding:0;list-style:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* ---- hero ---- */
-.hero{padding:64px 0 88px}
-.hero__inner{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center}
-.hero__title{font-family:var(--font-display); font-weight:700; letter-spacing:-1.5px; font-size:clamp(38px,5.4vw,62px); line-height:1.02; margin:0 0 22px}
+.hero{padding:48px 0 72px}
+.hero__inner{display:grid; grid-template-columns:1.08fr 1.42fr; gap:28px; align-items:center}
+.hero__title{font-family:var(--font-display); font-weight:700; letter-spacing:-1.5px; font-size:clamp(34px,4.6vw,54px); line-height:1.02; margin:0 0 22px}
 .hero__title-line{display:block; opacity:0; transform:translateY(18px); animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
 .hero__title-line:last-child{color:var(--green)}
 @keyframes rise{to{opacity:1; transform:none}}
@@ -1155,32 +1131,40 @@ ul{margin:0;padding:0;list-style:none}
 .hero__risk{font-size:14px; color:var(--muted-2)}
 
 /* dashboard mock */
-.dash{position:relative; border:1px solid var(--line-2); border-radius:var(--radius); background:linear-gradient(180deg,var(--bg-2),var(--bg)); overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5); animation:rise .8s .2s both}
-.dash__glow{position:absolute; top:-40%; right:-20%; width:60%; height:80%; background:radial-gradient(circle,rgba(40,184,63,.22),transparent 65%); pointer-events:none}
-.dash__chrome{display:flex; align-items:center; gap:7px; padding:13px 16px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.02)}
-.dot{width:11px; height:11px; border-radius:50%; background:#2c3138}
-.dash__url{margin-left:12px; font-size:12px; color:var(--muted-2); font-family:var(--font-body)}
-.dash__body{padding:18px; display:grid; gap:16px}
-.dash__kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-.kpi{background:var(--bg-3); border:1px solid var(--line); border-radius:var(--radius-sm); padding:13px}
-.kpi__label{display:block; font-size:11.5px; color:var(--muted-2); margin-bottom:6px}
-.kpi__value{display:block; font-family:var(--font-display); font-weight:600; font-size:21px}
-.kpi__trend{font-size:12px; font-weight:600}
-.kpi__trend--up{color:var(--green)}
-.kpi__trend--down{color:var(--danger)}
-.dash__chart{background:var(--bg-3); border:1px solid var(--line); border-radius:var(--radius-sm); padding:15px}
-.dash__chart-head{display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--muted); margin-bottom:14px}
-.dash__chart-tag{color:var(--green); font-weight:600; font-size:11px; border:1px solid rgba(40,184,63,.4); padding:2px 8px; border-radius:999px}
-.dash__bars{display:flex; align-items:flex-end; gap:10px; height:96px}
-.dash__bar{flex:1; height:0; align-self:flex-end; background:linear-gradient(180deg,var(--green-hi),var(--green)); border-radius:5px 5px 2px 2px; animation:grow .8s cubic-bezier(.2,.7,.3,1) forwards; opacity:.92}
-.dash__bar:nth-child(6){box-shadow:0 0 18px rgba(40,184,63,.6)}
-@keyframes grow{to{height:var(--h)}}
-.dash__feed{display:grid; gap:8px}
-.dash__row{display:flex; align-items:center; gap:10px; font-size:13px; padding:9px 12px; background:var(--bg-3); border:1px solid var(--line); border-radius:10px; opacity:0; animation:fadeIn .5s forwards}
 @keyframes fadeIn{to{opacity:1}}
-.dash__row-dot{width:7px; height:7px; border-radius:50%; background:var(--green); flex:none}
-.dash__row-text{flex:1}
-.dash__row-meta{color:var(--muted-2); font-size:11.5px}
+    <div className="dash dash--showcase" role="img" aria-label="NexaERP dashboard preview">
+      <div className="dash__stage">
+        <div className="dash__glow" aria-hidden="true" />
+        <div className="dash__shell">
+          <div className="dash__chrome">
+            <span className="dot" /><span className="dot" /><span className="dot" />
+            <span className="dash__url">app.nexaerp.com / dashboard</span>
+          </div>
+          <div className="dash__screen">
+            <img src="/images/nexa-erp-dashboard.png" alt="NexaERP dashboard screenshot" className="dash__screen-img" />
+          </div>
+        </div>
+.dash--showcase{padding:10px 0; position:relative; overflow:visible}
+.dash--showcase::before{content:''; position:absolute; inset:-8% -6% auto auto; width:72%; height:86%; background:radial-gradient(circle at 30% 25%, rgba(40,184,63,.18), transparent 54%); filter:blur(42px); pointer-events:none; z-index:0}
+.dash__stage{position:relative; z-index:1; padding-left:14px}
+.dash__shell{position:relative; width:100%; max-width:920px; border-radius:22px; background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.05); box-shadow:0 48px 140px rgba(0,0,0,.62); overflow:hidden}
+.dash__chrome{display:flex; align-items:center; gap:7px; padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02)}
+.dash__screen{padding:18px; background:linear-gradient(180deg,rgba(10,11,13,.98),rgba(8,9,10,.96));}
+.dash__screen-img{display:block; width:100%; height:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.45); background:#fff}
+
+@media (max-width:980px){
+  .hero__inner{grid-template-columns:1fr; gap:34px}
+  .hero__copy{order:1}
+  .dash--showcase{padding:0}
+  .dash__stage{padding-left:0}
+  .dash__shell{max-width:100%}
+  .dash__screen{padding:12px}
+}
+
+@media (min-width:1400px){
+  .dash__shell{max-width:980px}
+  .dash__screen{padding:22px}
+}
 
 /* ---- trust marquee ---- */
 .marquee{padding:30px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-2)}
