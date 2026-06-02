@@ -523,7 +523,7 @@ function DashboardMock() {
             <span className="dot" /><span className="dot" /><span className="dot" />
           </div>
           <div className="dash__screen">
-            <img src="/images/nexa-erp-dashboard.png" alt="NexaERP dashboard screenshot" className="dash__screen-img" />
+            <img src="/images/gallery-1.png" alt="NexaERP gallery image 1" className="dash__screen-img" />
           </div>
         </div>
       </div>
@@ -1122,6 +1122,8 @@ ul{margin:0;padding:0;list-style:none}
 /* ---- hero ---- */
 .hero{padding:48px 0 72px}
 .hero__inner{display:grid; grid-template-columns:1.08fr 1.42fr; gap:28px; align-items:center}
+.hero__inner{display:grid; grid-template-columns:1.02fr 1.48fr; gap:28px; align-items:center}
+.dash__shell{max-width:980px; border-radius:22px; background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.05); box-shadow:0 48px 140px rgba(0,0,0,.62); overflow:hidden}
 .hero__title{font-family:var(--font-display); font-weight:700; letter-spacing:-1.5px; font-size:clamp(34px,4.6vw,54px); line-height:1.02; margin:0 0 22px}
 .hero__title-line{display:block; opacity:0; transform:translateY(18px); animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
 .hero__title-line:last-child{color:var(--green)}
@@ -1141,15 +1143,15 @@ ul{margin:0;padding:0;list-style:none}
             <span className="dash__url">app.nexaerp.com / dashboard</span>
           </div>
           <div className="dash__screen">
-            <img src="/images/nexa-erp-dashboard.png" alt="NexaERP dashboard screenshot" className="dash__screen-img" />
+            <img src="/images/gallery-1.png" alt="NexaERP gallery image 1" className="dash__screen-img" />
           </div>
         </div>
 .dash--showcase{padding:10px 0; position:relative; overflow:visible}
 .dash--showcase::before{content:''; position:absolute; inset:-8% -6% auto auto; width:72%; height:86%; background:radial-gradient(circle at 30% 25%, rgba(40,184,63,.18), transparent 54%); filter:blur(42px); pointer-events:none; z-index:0}
-.dash__stage{position:relative; z-index:1; padding-left:14px}
-.dash__shell{position:relative; width:100%; max-width:920px; border-radius:22px; background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.05); box-shadow:0 48px 140px rgba(0,0,0,.62); overflow:hidden}
+.dash__stage{position:relative; z-index:1; padding-left:24px}
+.dash__shell{position:relative; width:100%; max-width:1140px; border-radius:22px; background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); border:1px solid rgba(255,255,255,.05); box-shadow:0 48px 140px rgba(0,0,0,.62); overflow:hidden}
 .dash__chrome{display:flex; align-items:center; gap:7px; padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02)}
-.dash__screen{padding:18px; background:linear-gradient(180deg,rgba(10,11,13,.98),rgba(8,9,10,.96));}
+.dash__screen{padding:26px; background:linear-gradient(180deg,rgba(10,11,13,.98),rgba(8,9,10,.96));}
 .dash__screen-img{display:block; width:100%; height:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.45); background:#fff}
 
 @media (max-width:980px){
@@ -1158,12 +1160,12 @@ ul{margin:0;padding:0;list-style:none}
   .dash--showcase{padding:0}
   .dash__stage{padding-left:0}
   .dash__shell{max-width:100%}
-  .dash__screen{padding:12px}
+  .dash__screen{padding:18px}
 }
 
 @media (min-width:1400px){
-  .dash__shell{max-width:980px}
-  .dash__screen{padding:22px}
+  .dash__shell{max-width:1180px}
+  .dash__screen{padding:32px}
 }
 
 /* ---- trust marquee ---- */
