@@ -38,6 +38,7 @@ import {
   Building2, ClipboardList, HeartHandshake, ReceiptText, BarChart3, FileCheck2,
   ShieldCheck, Smartphone, Menu, X, Check, ChevronDown, ArrowRight, Zap,
   TrendingDown, Phone, Mail, MapPin, Quote, ScanLine, RefreshCw, Play,
+  MessageCircle, CalendarClock,
 } from 'lucide-react'
 
 /* ===========================================================================
@@ -55,7 +56,15 @@ const BRAND = {
   locations: ['Dhaka, Bangladesh', 'Long Island City, NY'],
   // REPLACE BEFORE LAUNCH — wire to real demo form / Outreaq (NexaCRM) pipeline
   demoUrl: '#book-demo',
+  // REPLACE BEFORE LAUNCH — WhatsApp number in international format, digits only (no +, spaces or dashes)
+  whatsapp: '8801XXXXXXXXX',
+  whatsappMsg: 'Hi, I’d like to book a NexaERP demo.',
+  // REPLACE BEFORE LAUNCH — Google Calendar appointment-schedule link (or Calendly). Leave blank to hide the button.
+  calendarUrl: '',
 }
+
+// wa.me deep link with a pre-filled message
+const waLink = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(BRAND.whatsappMsg)}`
 
 /* ===========================================================================
  * 2. NAV
@@ -66,6 +75,7 @@ const NAV_LINKS = [
   { label: 'ROI', href: '#roi' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
+  { label: 'Contact', href: '#book-demo' },
 ]
 
 /* ===========================================================================
@@ -255,6 +265,18 @@ const TESTIMONIALS = [
 ]
 
 /* ===========================================================================
+ * 12b. CUSTOMER VIDEO STORIES — real customers, in their own words.
+ *      REPLACE BEFORE LAUNCH — paste each customer's YouTube VIDEO ID
+ *      (the part after watch?v= , e.g. "dQw4w9WgXcQ") into `youtubeId`.
+ *      Leave blank to show the styled placeholder card.
+ * ======================================================================== */
+const VIDEO_STORIES = [
+  { name: 'Customer name', role: 'Managing Director', org: 'Trading & Distribution', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
+  { name: 'Customer name', role: 'Head of Operations', org: 'Manufacturing', blurb: 'Getting to 98%+ stock accuracy across 4 warehouses.', youtubeId: '' },
+  { name: 'Customer name', role: 'Finance Controller', org: 'Importer / Retail Chain', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
+]
+
+/* ===========================================================================
  * 13. PRICING — decoy structure. Business = center-stage. Enterprise = anchor.
  *     Prices are from the current deck. REPLACE BEFORE LAUNCH if they change.
  * ======================================================================== */
@@ -268,7 +290,7 @@ const PRICING = {
       monthly: 2000,
       users: '1–2 users',
       featured: false,
-      cta: 'Start with Starter',
+      cta: 'Book a demo of Starter',
       features: [
         'Financial Accounts (GL, voucher, ledger)',
         'Sales & invoicing (single price list)',
@@ -305,7 +327,7 @@ const PRICING = {
       monthly: 80000,
       users: 'Unlimited users',
       featured: false,
-      cta: 'Talk to sales',
+      cta: 'Book a demo of Enterprise',
       features: [
         'Everything in Business, plus —',
         'Manufacturing & Production (BOM, MRP)',
@@ -474,6 +496,7 @@ export default function App() {
         <RoiCalculator />
         <ReframeBand />
         <Testimonials />
+        <CustomerStories />
         <Pricing />
         <Faq />
         <FinalCta />
@@ -855,6 +878,62 @@ function Testimonials() {
   )
 }
 
+/* ------------------------------------------------------- CUSTOMER STORIES --- */
+function CustomerStories() {
+  return (
+    <section id="stories" className="section stories">
+      <div className="container">
+        <SectionHead
+          kicker="In their own words"
+          heading="Customers, on camera."
+          intro="Real businesses telling you what changed after NexaERP — not our words, theirs."
+          center
+        />
+        <div className="stories__grid">
+          {VIDEO_STORIES.map((s, i) => <StoryCard key={i} story={s} />)}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function StoryCard({ story }) {
+  const [playing, setPlaying] = useState(false)
+  const hasVideo = Boolean(story.youtubeId)
+  return (
+    <article className="story">
+      <div className="story__video">
+        {playing && hasVideo ? (
+          <iframe
+            className="story__iframe"
+            src={`https://www.youtube.com/embed/${story.youtubeId}?autoplay=1&rel=0`}
+            title={`${story.name} — ${story.org}`}
+            allow="accelerated-encoder; autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            className="story__poster"
+            onClick={() => hasVideo && setPlaying(true)}
+            aria-label={hasVideo ? `Play ${story.org} story` : 'Customer story — add a YouTube ID in the VIDEO_STORIES constant'}
+            style={hasVideo ? { backgroundImage: `url(https://img.youtube.com/vi/${story.youtubeId}/hqdefault.jpg)` } : undefined}
+          >
+            <span className="story__play"><Play size={22} fill="currentColor" aria-hidden="true" /></span>
+            {!hasVideo && <span className="story__hint">Add YouTube link</span>}
+          </button>
+        )}
+      </div>
+      <div className="story__body">
+        <p className="story__blurb">“{story.blurb}”</p>
+        <div className="story__cap">
+          <span className="story__name">{story.name}</span>
+          <span className="story__role">{story.role} · {story.org}</span>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 /* -------------------------------------------------------------- PRICING --- */
 function Pricing() {
   const [annual, setAnnual] = useState(false)
@@ -951,12 +1030,28 @@ function FinalCta() {
         <span className="final__scarcity">{FINAL.scarcity}</span>
         <h2 className="final__heading">{FINAL.heading}</h2>
         <p className="final__sub">{FINAL.sub}</p>
-        <a href={BRAND.demoUrl} className="btn btn--primary btn--xl">{FINAL.primaryCta}<ArrowRight size={20} /></a>
         <p className="final__risk">{FINAL.riskReversal}</p>
-        <div className="final__contact">
-          <a href={`tel:${BRAND.phone.replace(/\s/g, '')}`}><Phone size={16} aria-hidden="true" />{BRAND.phone}</a>
-          <a href={`mailto:${BRAND.email}`}><Mail size={16} aria-hidden="true" />{BRAND.email}</a>
+
+        {/* Pick-a-time + WhatsApp — the fast, low-friction ways to start a conversation */}
+        <div className="final__methods">
+          {BRAND.calendarUrl && (
+            <a className="final__method final__method--cal" href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
+              <CalendarClock size={18} aria-hidden="true" /> Pick a time
+            </a>
+          )}
+          <a className="final__method final__method--wa" href={waLink} target="_blank" rel="noopener noreferrer">
+            <MessageCircle size={18} aria-hidden="true" /> WhatsApp us
+          </a>
+          <a className="final__method" href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>
+            <Phone size={16} aria-hidden="true" /> {BRAND.phone}
+          </a>
+          <a className="final__method" href={`mailto:${BRAND.email}`}>
+            <Mail size={16} aria-hidden="true" /> {BRAND.email}
+          </a>
         </div>
+        {!BRAND.calendarUrl && (
+          <p className="final__cal-hint">Tip: add a Google Calendar appointment link to <code>BRAND.calendarUrl</code> to let visitors pick a slot instantly.</p>
+        )}
       </div>
     </section>
   )
@@ -1296,6 +1391,26 @@ ul{margin:0;padding:0;list-style:none}
 .testimonial__org{font-size:13.5px; color:var(--muted-2)}
 .testimonials__note{text-align:center; font-size:13px; color:var(--muted-2); margin:24px 0 0; font-style:italic}
 
+/* ---- customer video stories ---- */
+.stories{background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.stories__grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+.story{background:var(--bg); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; transition:border-color .25s, transform .25s, box-shadow .25s}
+.story:hover{border-color:rgba(40,184,63,.45); transform:translateY(-4px); box-shadow:0 18px 44px rgba(0,0,0,.45)}
+.story__video{position:relative; aspect-ratio:16/9; background:#000}
+.story__iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.story__poster{position:absolute; inset:0; width:100%; height:100%; border:none; cursor:pointer; display:grid; place-items:center; gap:10px; background:linear-gradient(150deg,var(--bg-3),var(--bg)); background-size:cover; background-position:center; overflow:hidden}
+.story__poster::after{content:''; position:absolute; inset:0; background:rgba(6,8,9,.42); transition:background .25s}
+.story:hover .story__poster::after{background:rgba(6,8,9,.18)}
+.story__play{position:relative; z-index:2; width:60px; height:60px; border-radius:50%; background:var(--green); color:#04210b; display:grid; place-items:center; box-shadow:0 6px 22px rgba(40,184,63,.45); transition:transform .2s, background .2s}
+.story__play svg{margin-left:2px}
+.story:hover .story__play{transform:scale(1.1); background:var(--green-hi)}
+.story__hint{position:relative; z-index:2; font-size:12px; font-weight:600; color:var(--ink)}
+.story__body{padding:20px}
+.story__blurb{font-family:var(--font-display); font-weight:500; font-size:16.5px; line-height:1.45; margin:0 0 16px}
+.story__cap{display:flex; flex-direction:column; gap:2px}
+.story__name{font-weight:600; font-size:14.5px}
+.story__role{font-size:13px; color:var(--muted-2)}
+
 /* ---- reframe band ---- */
 .reframe{padding:84px 0; background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); position:relative; overflow:hidden}
 .reframe::before{content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:680px; height:340px; background:radial-gradient(ellipse,rgba(40,184,63,.1),transparent 65%); pointer-events:none}
@@ -1353,9 +1468,15 @@ ul{margin:0;padding:0;list-style:none}
 .final__heading{font-family:var(--font-display); font-weight:700; letter-spacing:-1px; font-size:clamp(32px,5vw,52px); line-height:1.05; margin:0 0 18px}
 .final__sub{font-size:19px; color:var(--muted); margin:0 0 32px}
 .final__risk{font-size:14px; color:var(--muted-2); margin:18px 0 0}
-.final__contact{display:flex; gap:28px; justify-content:center; margin-top:34px; flex-wrap:wrap}
-.final__contact a{display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-weight:600; font-size:15px; transition:color .2s}
-.final__contact a:hover{color:var(--green)}
+.final__methods{display:flex; gap:12px; justify-content:center; margin-top:34px; flex-wrap:wrap}
+.final__method{display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-weight:600; font-size:15px; padding:11px 18px; border:1px solid var(--line-2); border-radius:11px; transition:color .2s, border-color .2s, background .2s, transform .15s}
+.final__method:hover{color:var(--ink); border-color:var(--green); transform:translateY(-2px)}
+.final__method--wa{color:var(--green); border-color:rgba(40,184,63,.4); background:rgba(40,184,63,.08)}
+.final__method--wa:hover{color:#04210b; background:var(--green); border-color:var(--green)}
+.final__method--cal{color:var(--ink); border-color:var(--green); background:rgba(40,184,63,.1)}
+.final__method--cal:hover{color:#04210b; background:var(--green)}
+.final__cal-hint{font-size:12px; color:var(--muted-2); margin:18px 0 0}
+.final__cal-hint code{background:var(--bg-3); padding:2px 6px; border-radius:5px; font-size:11.5px; color:var(--green)}
 
 /* ---- footer ---- */
 .footer{border-top:1px solid var(--line); padding:64px 0 32px; background:var(--bg)}
@@ -1377,6 +1498,7 @@ ul{margin:0;padding:0;list-style:none}
   .warehouse__access ul{grid-template-columns:1fr 1fr}
   .how__track{grid-template-columns:repeat(3,1fr); gap:28px}
   .how__track::before{display:none}
+  .stories__grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:860px){
   .nav__links,.nav__signin{display:none}
@@ -1393,6 +1515,7 @@ ul{margin:0;padding:0;list-style:none}
   .roi__panel{grid-template-columns:1fr}
   .roi__result{border-left:none; border-top:1px solid var(--line)}
   .testimonials{grid-template-columns:1fr}
+  .stories__grid{grid-template-columns:1fr}
   .pricing__grid{grid-template-columns:1fr}
   .tier--featured{transform:none; order:-1}
   .footer__inner{grid-template-columns:1fr}
