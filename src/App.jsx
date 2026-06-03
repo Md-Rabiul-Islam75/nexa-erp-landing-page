@@ -86,6 +86,7 @@ const HERO = {
   // Authority (real proof: runs national utilities) + Desire (be in control).
   titleLines: ['The ERP trusted to', 'power a nation —', 'now running your business.'],
   sub: 'One system for finance, inventory, billing, HR, manufacturing and NBR compliance. One database. One truth. Your business back in your control.',
+  subBn: 'এক system-এ পুরো business — finance, inventory, billing, HR, manufacturing আর NBR compliance। এক database, এক truth, আপনার হাতে control।',
   primaryCta: 'Book a free demo',
   secondaryCta: 'Watch the 2-min tour',
   riskReversal: 'Free 30-min walkthrough · No credit card · See your own numbers live.',
@@ -244,12 +245,21 @@ const ROI = {
 const REFRAME = {
   band: [
     {
+      bn: 'ঘড়ি থামে না, leak-ও থামে না। প্রতিটা মাস চলে যাওয়া মানে প্রতিটা মাসের টাকা চলে যাওয়া।',
       text: 'The clock doesn’t wait, and neither does the leak. Every month gone is money gone.',
+      emphasisBn: 'সিদ্ধান্ত দেরি করা আপনাকে বাঁচায় না — উল্টো খরচ বাড়ায়।',
       emphasis: 'Delaying the decision doesn’t protect you — it costs you.',
     },
-    'We counted only 60%. Even if we’re half wrong, it still pays for itself in the first month.',
-    'The bigger your business, the bigger the leak — and the plan price never catches up to it.',
+    {
+      bn: 'আমরা কিন্তু মাত্র ৬০% ধরেছি। ধরুন তাতেও অর্ধেক ভুল — তবুও প্রথম মাসেই পুরো খরচ উঠে আসে।',
+      text: 'We counted only 60%. Even if we’re half wrong, it still pays for itself in the first month.',
+    },
+    {
+      bn: 'আপনার business যত বড়, leak তত বড় — অথচ plan-এর দাম সেই leak-কে কখনো ধরতে পারে না।',
+      text: 'The bigger your business, the bigger the leak — and the plan price never catches up to it.',
+    },
   ],
+  pricingPunchBn: 'বেশিরভাগ business প্রতি মাসে NexaERP-এর দামের ৫–১২ গুণ চুপচাপ হারায়। প্রশ্নটা কখনোই ছিল না — “আমি কি এটা afford করতে পারব?” প্রশ্নটা হলো — “এই leak আমি কতদিন afford করব?”',
   pricingPunch: 'Most businesses lose 5–12× the price of NexaERP every month, quietly. The question was never “can I afford it.” It’s “can I afford the leak.”',
 }
 
@@ -259,9 +269,9 @@ const REFRAME = {
  *     invented quotes to named clients (BPDB, DESCO, etc.).
  * ======================================================================== */
 const TESTIMONIALS = [
-  { quote: 'Month-end used to eat fifteen days. Now the books close on the fifth and I trust every number in them.', role: 'Finance Director', org: 'National Power Distributor' },
-  { quote: 'My salesmen take orders in the field, even with no signal, and I see it from my office in real time. Same data, everyone.', role: 'Head of Sales', org: 'FMCG Distribution Group' },
-  { quote: 'When the VAT audit came, every Mushak document was ready in seconds. No scramble, no stress.', role: 'Chief Accountant', org: 'Mid-size Manufacturer' },
+  { quoteBn: 'Month-end-এ আগে ১৫ দিন চলে যেত। এখন ৫ তারিখেই books close, আর প্রতিটা number-এ আমি ভরসা রাখতে পারি।', quote: 'Month-end used to eat fifteen days. Now the books close on the fifth and I trust every number in them.', role: 'Finance Director', org: 'National Power Distributor' },
+  { quoteBn: 'আমার salesman-রা field থেকে order নেয়, signal না থাকলেও — আর আমি office থেকে real-time দেখি। সবাই একই data দেখছে।', quote: 'My salesmen take orders in the field, even with no signal, and I see it from my office in real time. Same data, everyone.', role: 'Head of Sales', org: 'FMCG Distribution Group' },
+  { quoteBn: 'VAT audit যখন এলো, প্রতিটা Mushak document সেকেন্ডে ready ছিল। কোনো ছোটাছুটি নেই, stress নেই।', quote: 'When the VAT audit came, every Mushak document was ready in seconds. No scramble, no stress.', role: 'Chief Accountant', org: 'Mid-size Manufacturer' },
 ]
 
 /* ===========================================================================
@@ -271,9 +281,9 @@ const TESTIMONIALS = [
  *      Leave blank to show the styled placeholder card.
  * ======================================================================== */
 const VIDEO_STORIES = [
-  { name: 'Customer name', role: 'Managing Director', org: 'Trading & Distribution', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
-  { name: 'Customer name', role: 'Head of Operations', org: 'Manufacturing', blurb: 'Getting to 98%+ stock accuracy across 4 warehouses.', youtubeId: '' },
-  { name: 'Customer name', role: 'Finance Controller', org: 'Importer / Retail Chain', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
+  { name: 'Customer name', role: 'Managing Director', org: 'Trading & Distribution', blurbBn: '১৫ দিনের month-end close যেভাবে ৫ দিনে নেমে এলো।', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
+  { name: 'Customer name', role: 'Head of Operations', org: 'Manufacturing', blurbBn: '৪টি warehouse-এ ৯৮%+ stock accuracy যেভাবে এলো।', blurb: 'Getting to 98%+ stock accuracy across 4 warehouses.', youtubeId: '' },
+  { name: 'Customer name', role: 'Finance Controller', org: 'Importer / Retail Chain', blurbBn: 'একটা login কীভাবে ১৫টা আলাদা app আর spreadsheet সরিয়ে দিল।', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
 ]
 
 /* ===========================================================================
@@ -459,7 +469,8 @@ export default function App() {
           </nav>
 
           <div className="nav__actions">
-            <a href="#" className="btn btn--ghost nav__signin">Sign in</a>
+            {/* Sign in hidden for now — restore this line when the login is ready */}
+            {/* <a href="#" className="btn btn--ghost nav__signin">Sign in</a> */}
             <a href={BRAND.demoUrl} className="btn btn--primary">Book a free demo</a>
           </div>
 
@@ -521,7 +532,8 @@ function Hero() {
               </span>
             ))}
           </h1>
-          <p className="hero__sub">{HERO.sub}</p>
+          {/* English sub kept in HERO.sub constant if you ever want it back */}
+          <p className="hero__sub-bn bn">{HERO.subBn}</p>
           <div className="hero__ctas">
             <a href={BRAND.demoUrl} className="btn btn--primary btn--lg">{HERO.primaryCta}<ArrowRight size={18} /></a>
             <a href="#tour" className="btn btn--outline btn--lg">{HERO.secondaryCta}</a>
@@ -838,16 +850,14 @@ function ReframeBand() {
   return (
     <section className="reframe">
       <div ref={ref} className={`container reframe__inner ${shown ? 'in' : ''}`}>
-        {REFRAME.band.map((q, i) => {
-          const text = typeof q === 'string' ? q : q.text
-          const emphasis = typeof q === 'string' ? null : q.emphasis
-          return (
-            <p key={i} className="reframe__quote" style={{ transitionDelay: `${i * 140}ms` }}>
-              <span className="reframe__mark" aria-hidden="true">“</span>{text}
-              {emphasis && <span className="reframe__kicker">{emphasis}</span>}
-            </p>
-          )
-        })}
+        {REFRAME.band.map((q, i) => (
+          <p key={i} className="reframe__quote" style={{ transitionDelay: `${i * 140}ms` }}>
+            <span className="reframe__mark" aria-hidden="true">“</span>
+            <span className="reframe__bn bn">{q.bn}</span>
+            {q.emphasisBn && <span className="reframe__kicker bn">{q.emphasisBn}</span>}
+            <span className="reframe__en">{q.text}{q.emphasis ? ` ${q.emphasis}` : ''}</span>
+          </p>
+        ))}
       </div>
     </section>
   )
@@ -858,13 +868,14 @@ function Testimonials() {
   return (
     <section className="section">
       <div className="container">
-        <SectionHead kicker="What leaders tell us" heading="Same data. Everyone. Finally." center />
+        <SectionHead kicker="What leaders tell us" heading="Same data. Everyone. Finally." introBn="ব্যবসায়ীরা যা বলছেন — এক system, এক truth, সবার হাতে একই data।" center />
         {/* REPLACE BEFORE LAUNCH: swap role-based placeholders for real approved quotes. */}
         <div className="testimonials">
           {TESTIMONIALS.map((t, i) => (
             <figure key={i} className="testimonial">
               <Quote className="testimonial__mark" size={28} aria-hidden="true" />
-              <blockquote className="testimonial__quote">{t.quote}</blockquote>
+              <blockquote className="testimonial__quote bn">{t.quoteBn}</blockquote>
+              <p className="testimonial__quote-en">{t.quote}</p>
               <figcaption className="testimonial__cap">
                 <span className="testimonial__role">{t.role}</span>
                 <span className="testimonial__org">{t.org}</span>
@@ -886,6 +897,7 @@ function CustomerStories() {
         <SectionHead
           kicker="In their own words"
           heading="Customers, on camera."
+          introBn="গ্রাহকদের মুখেই শুনুন — NexaERP-এর পরে তাঁদের business-এ কী বদলালো।"
           intro="Real businesses telling you what changed after NexaERP — not our words, theirs."
           center
         />
@@ -924,7 +936,8 @@ function StoryCard({ story }) {
         )}
       </div>
       <div className="story__body">
-        <p className="story__blurb">“{story.blurb}”</p>
+        <p className="story__blurb bn">“{story.blurbBn}”</p>
+        <p className="story__blurb-en">{story.blurb}</p>
         <div className="story__cap">
           <span className="story__name">{story.name}</span>
           <span className="story__role">{story.role} · {story.org}</span>
@@ -951,7 +964,10 @@ function Pricing() {
           center
         />
 
-        <p className="pricing__punch">{REFRAME.pricingPunch}</p>
+        <div className="pricing__punch">
+          <p className="pricing__punch-bn bn">{REFRAME.pricingPunchBn}</p>
+          <p className="pricing__punch-en">{REFRAME.pricingPunch}</p>
+        </div>
 
         <div className="pricing__toggle" role="group" aria-label="Billing period">
           <button className={!annual ? 'on' : ''} onClick={() => setAnnual(false)} aria-pressed={!annual}>Monthly</button>
@@ -1105,11 +1121,12 @@ function Footer() {
 }
 
 /* --------------------------------------------------------- SECTION HEAD --- */
-function SectionHead({ kicker, heading, intro, center, kickerDanger }) {
+function SectionHead({ kicker, heading, intro, introBn, center, kickerDanger }) {
   return (
     <div className={`sec-head ${center ? 'sec-head--center' : ''}`}>
       <p className={`kicker ${kickerDanger ? 'kicker--danger' : ''}`}>{kicker}</p>
       <h2 className="sec-head__title">{heading}</h2>
+      {introBn && <p className="sec-head__intro-bn bn">{introBn}</p>}
       {intro && <p className="sec-head__intro">{intro}</p>}
     </div>
   )
@@ -1133,7 +1150,10 @@ const CSS = `
   --maxw:1180px;
   --font-display:'Bricolage Grotesque',sans-serif;
   --font-body:'Hanken Grotesk',sans-serif;
+  --font-bn:'Hind Siliguri','Hanken Grotesk',sans-serif;
 }
+/* Bangla text — clean Bengali rendering for native-language emotional copy */
+.bn{font-family:var(--font-bn); line-height:1.55}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0}
@@ -1208,6 +1228,8 @@ ul{margin:0;padding:0;list-style:none}
   font-family:var(--font-display); font-weight:600; letter-spacing:-1px;
   font-size:clamp(28px,4vw,44px); line-height:1.08; margin:0;
 }
+.sec-head__intro-bn{color:var(--ink); font-size:18.5px; font-weight:500; margin:18px 0 0}
+.sec-head__intro-bn + .sec-head__intro{font-size:15px; margin-top:8px; color:var(--muted-2)}
 .sec-head__intro{color:var(--muted); font-size:18px; margin:18px 0 0}
 
 .eyebrow{display:inline-flex; align-items:center; gap:9px; font-size:14px; font-weight:600; color:var(--muted); margin:0 0 22px; border:1px solid var(--line); padding:7px 14px; border-radius:999px; background:var(--bg-2)}
@@ -1223,7 +1245,17 @@ ul{margin:0;padding:0;list-style:none}
 .hero__title-line{display:block; opacity:0; transform:translateY(18px); animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
 .hero__title-line:last-child{color:var(--green)}
 @keyframes rise{to{opacity:1; transform:none}}
-.hero__sub{font-size:19px; color:var(--muted); max-width:520px; margin:0 0 30px}
+.hero__sub{font-size:19px; color:var(--muted); max-width:520px; margin:0 0 14px}
+.hero__sub-bn{
+  position:relative; max-width:560px; margin:0 0 32px; padding:4px 0 4px 20px;
+  font-size:clamp(18px,2vw,21px); font-weight:500; line-height:1.75; color:var(--ink);
+}
+/* green accent bar — makes the Bangla line read as an intentional lead, not a fallback */
+.hero__sub-bn::before{
+  content:''; position:absolute; left:0; top:6px; bottom:6px; width:3px; border-radius:3px;
+  background:linear-gradient(180deg,var(--green-hi),var(--green));
+  box-shadow:0 0 14px rgba(40,184,63,.45);
+}
 .hero__ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px}
 .hero__risk{font-size:14px; color:var(--muted-2)}
 
@@ -1385,7 +1417,8 @@ ul{margin:0;padding:0;list-style:none}
 .testimonials{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
 .testimonial{background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius); padding:28px; margin:0; position:relative}
 .testimonial__mark{color:var(--green); opacity:.55; margin-bottom:12px}
-.testimonial__quote{font-family:var(--font-display); font-weight:500; font-size:18px; line-height:1.5; margin:0 0 20px}
+.testimonial__quote{font-weight:600; font-size:18px; line-height:1.6; margin:0 0 12px; color:var(--ink)}
+.testimonial__quote-en{font-size:13.5px; line-height:1.5; color:var(--muted-2); margin:0 0 20px}
 .testimonial__cap{display:flex; flex-direction:column; gap:2px}
 .testimonial__role{font-weight:600; font-size:15px}
 .testimonial__org{font-size:13.5px; color:var(--muted-2)}
@@ -1406,7 +1439,8 @@ ul{margin:0;padding:0;list-style:none}
 .story:hover .story__play{transform:scale(1.1); background:var(--green-hi)}
 .story__hint{position:relative; z-index:2; font-size:12px; font-weight:600; color:var(--ink)}
 .story__body{padding:20px}
-.story__blurb{font-family:var(--font-display); font-weight:500; font-size:16.5px; line-height:1.45; margin:0 0 16px}
+.story__blurb{font-weight:600; font-size:16.5px; line-height:1.55; margin:0 0 8px; color:var(--ink)}
+.story__blurb-en{font-size:12.5px; line-height:1.5; color:var(--muted-2); margin:0 0 16px}
 .story__cap{display:flex; flex-direction:column; gap:2px}
 .story__name{font-weight:600; font-size:14.5px}
 .story__role{font-size:13px; color:var(--muted-2)}
@@ -1415,16 +1449,19 @@ ul{margin:0;padding:0;list-style:none}
 .reframe{padding:84px 0; background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); position:relative; overflow:hidden}
 .reframe::before{content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:680px; height:340px; background:radial-gradient(ellipse,rgba(40,184,63,.1),transparent 65%); pointer-events:none}
 .reframe__inner{position:relative; display:grid; gap:30px; max-width:880px}
-.reframe__quote{position:relative; margin:0; padding-left:34px; font-family:var(--font-display); font-weight:500; font-size:clamp(20px,2.8vw,28px); line-height:1.4; color:var(--ink); opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease}
+.reframe__quote{position:relative; margin:0; padding-left:34px; opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease}
 .reframe__inner.in .reframe__quote{opacity:1; transform:none}
 .reframe__quote:nth-child(2){padding-left:64px}
-.reframe__quote:nth-child(3){padding-left:34px}
-.reframe__kicker{display:block; margin-top:12px; color:var(--green); font-weight:600; font-size:.82em; line-height:1.35}
-.reframe__mark{position:absolute; left:0; top:-6px; font-family:var(--font-display); font-weight:700; font-size:46px; line-height:1; color:var(--green)}
+.reframe__bn{display:block; font-weight:600; font-size:clamp(20px,2.8vw,29px); line-height:1.5; color:var(--ink)}
+.reframe__kicker{display:block; margin-top:10px; color:var(--green); font-weight:600; font-size:clamp(17px,2.3vw,23px); line-height:1.45}
+.reframe__en{display:block; margin-top:12px; font-family:var(--font-body); font-weight:400; font-size:14.5px; line-height:1.5; color:var(--muted-2)}
+.reframe__mark{position:absolute; left:0; top:-8px; font-family:var(--font-display); font-weight:700; font-size:46px; line-height:1; color:var(--green)}
 .reframe__quote:nth-child(2) .reframe__mark{left:30px}
 
 /* ---- pricing ---- */
-.pricing__punch{max-width:760px; margin:-22px auto 36px; text-align:center; font-family:var(--font-display); font-weight:500; font-size:clamp(17px,2.2vw,21px); line-height:1.45; color:var(--ink); border-left:3px solid var(--green); background:rgba(40,184,63,.06); padding:16px 22px; border-radius:0 10px 10px 0}
+.pricing__punch{max-width:780px; margin:-22px auto 36px; border-left:3px solid var(--green); background:rgba(40,184,63,.06); padding:18px 24px; border-radius:0 10px 10px 0}
+.pricing__punch-bn{margin:0; font-weight:600; font-size:clamp(17px,2.2vw,22px); line-height:1.5; color:var(--ink)}
+.pricing__punch-en{margin:10px 0 0; font-size:14px; line-height:1.5; color:var(--muted-2)}
 .pricing__toggle{display:flex; justify-content:center; gap:6px; background:var(--bg-3); border:1px solid var(--line); border-radius:999px; padding:5px; width:max-content; margin:0 auto 44px}
 .pricing__toggle button{border:none; background:none; color:var(--muted); font-family:var(--font-body); font-weight:600; font-size:14.5px; padding:9px 20px; border-radius:999px; cursor:pointer; display:flex; align-items:center; gap:8px; transition:background .2s, color .2s}
 .pricing__toggle button.on{background:var(--green); color:#04210b}
