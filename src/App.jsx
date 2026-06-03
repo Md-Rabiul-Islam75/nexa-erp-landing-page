@@ -372,10 +372,14 @@ const FAQ = [
  * 15. FINAL CTA — peak-end + scarcity (genuine constraint)
  * ======================================================================== */
 const FINAL = {
+  headingBn: 'আপনার business আবার আপনার control-এ ফিরিয়ে আনুন।',
   heading: 'Bring your business back into control.',
+  subBn: 'কাল নয় — আজ। প্রতি মাস দেরি মানে আরও ৳৮–২০ লাখ hidden cost, চুপচাপ বেরিয়ে যাওয়া।',
   sub: 'Not tomorrow — today. Every month you wait is another ৳8–20 lakh in hidden cost, gone quietly.',
+  scarcityBn: 'এই quarter-এ মাত্র ৬টি onboarding slot খালি আছে।',
   scarcity: 'Only 6 onboarding slots open this quarter.',
   primaryCta: 'Book your free demo',
+  riskReversalBn: 'Free ৩০ মিনিটের demo · pilot-এ commit করতে হবে না · comfortable হলে তবেই full deal।',
   riskReversal: 'Free 30-min demo · No commitment to pilot · Full deal only when you’re comfortable.',
 }
 
@@ -1043,10 +1047,13 @@ function FinalCta() {
     <section id="book-demo" className="final">
       <div className="final__glow" aria-hidden="true" />
       <div className="container final__inner">
-        <span className="final__scarcity">{FINAL.scarcity}</span>
-        <h2 className="final__heading">{FINAL.heading}</h2>
-        <p className="final__sub">{FINAL.sub}</p>
-        <p className="final__risk">{FINAL.riskReversal}</p>
+        <span className="final__scarcity bn">{FINAL.scarcityBn}</span>
+        <h2 className="final__heading bn">{FINAL.headingBn}</h2>
+        <p className="final__heading-en">{FINAL.heading}</p>
+        <p className="final__sub bn">{FINAL.subBn}</p>
+        <p className="final__sub-en">{FINAL.sub}</p>
+        <p className="final__risk bn">{FINAL.riskReversalBn}</p>
+        <p className="final__risk-en">{FINAL.riskReversal}</p>
 
         {/* Pick-a-time + WhatsApp — the fast, low-friction ways to start a conversation */}
         <div className="final__methods">
@@ -1503,8 +1510,14 @@ ul{margin:0;padding:0;list-style:none}
 .final__inner{position:relative; max-width:720px}
 .final__scarcity{display:inline-block; font-size:13.5px; font-weight:600; color:var(--green); border:1px solid rgba(40,184,63,.4); background:rgba(40,184,63,.08); padding:8px 18px; border-radius:999px; margin-bottom:24px}
 .final__heading{font-family:var(--font-display); font-weight:700; letter-spacing:-1px; font-size:clamp(32px,5vw,52px); line-height:1.05; margin:0 0 18px}
+.final__heading.bn{line-height:1.3; margin:0 0 8px}
+.final__heading-en{font-family:var(--font-display); font-weight:600; letter-spacing:-.5px; font-size:clamp(17px,2.4vw,24px); color:var(--muted); margin:0 0 22px}
 .final__sub{font-size:19px; color:var(--muted); margin:0 0 32px}
+.final__sub.bn{color:var(--ink); font-weight:500; line-height:1.7; margin:0 0 6px}
+.final__sub-en{font-size:14.5px; color:var(--muted-2); margin:0 0 4px}
 .final__risk{font-size:14px; color:var(--muted-2); margin:18px 0 0}
+.final__risk.bn{color:var(--muted); font-weight:500; margin:20px 0 0}
+.final__risk-en{font-size:12.5px; color:var(--muted-2); margin:5px 0 0}
 .final__methods{display:flex; gap:12px; justify-content:center; margin-top:34px; flex-wrap:wrap}
 .final__method{display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-weight:600; font-size:15px; padding:11px 18px; border:1px solid var(--line-2); border-radius:11px; transition:color .2s, border-color .2s, background .2s, transform .15s}
 .final__method:hover{color:var(--ink); border-color:var(--green); transform:translateY(-2px)}
