@@ -93,12 +93,49 @@ const HERO = {
 }
 
 /* ===========================================================================
- * 4. TRUST MARQUEE — clients + regions served
- *    NOTE: BPDB/WZPDCL/DESCO/DPDC are confirmed. The deck lists only
- *    Bangladesh + New York — CONFIRM Canada/Australia/Dubai are real
- *    markets before launch, or trim them to stay 100% defensible.
+ * 4. TRUST / LOGO WALL — clients + regions served
+ *    CLIENT LOGOS: drop real logo files into  public/logos/  and the wordmark
+ *    placeholder auto-swaps to the image. Recommended: transparent PNG/SVG,
+ *    light/white version, ~200px wide. File names below must match.
+ *    NOTE: BPDB/WZPDCL/DESCO/DPDC are confirmed clients. The deck lists only
+ *    Bangladesh + New York — CONFIRM Canada/Australia/Dubai before launch.
  * ======================================================================== */
-const TRUST_CHIPS = ['BPDB', 'WZPDCL', 'DESCO', 'DPDC', 'US', 'Canada', 'Australia', 'Dubai']
+const LOGO_DIR = '/Mission-critical operations run on NexaERP/'
+const CLIENTS = [
+  { name: 'BPDB', file: 'BPDB.png' },
+  { name: 'WZPDCL', file: 'WZPDCL.png' },
+  { name: 'DESCO', file: 'DESCO.png' },
+  { name: 'DPDC', file: 'DPDC.png' },
+  { name: 'ASK Food', file: 'ASK FOOD.png' },
+  { name: 'ASK Technology', file: 'ASK Technology.png' },
+  { name: 'ASK Trading', file: 'ASK Trading.png' },
+  { name: 'Daruchini Catering (Coca-Cola)', file: 'Daruchini Catering Service(Coca-Cola).png' },
+  { name: 'LiqueMix', file: 'LiqueMix.jpg' },
+  { name: 'Rahman Moshiur & Co.', file: 'Rahman Moshiur & Co.png' },
+  { name: 'Seba Engineering Works', file: 'Seba Engineering Works.jpg' },
+  { name: 'ULS Limited', file: 'ULS Limited.png' },
+  { name: 'Urmi Enterprise', file: 'Urmi Enterprise.jpg' },
+  { name: 'VIP Door & Furniture', file: 'VIP DOOR & FURNITURE.png' },
+  { name: 'Zariya Living Ltd.', file: 'Zariya Living Ltd.png' },
+]
+// Country flags from flagcdn (crisp SVG). If a flag fails to load, the bold name still shows.
+const REGIONS = [
+  { name: 'United States', code: 'us' },
+  { name: 'Canada', code: 'ca' },
+  { name: 'Australia', code: 'au' },
+  { name: 'Dubai, UAE', code: 'ae' },
+]
+
+/* PRODUCT VIDEO IN HERO BANNER —
+ *   mp4: a file in /public (plays as a silent, looping ambient banner).
+ *   youtubeId: alternatively paste a YouTube ID (poster + click to play).
+ *   Leave both blank to show the styled placeholder.
+ */
+const HERO_VIDEO = {
+  mp4: '/video/banner_video.mp4',
+  youtubeId: '',
+  poster: '',
+}
 
 /* ===========================================================================
  * 4b. PRODUCT-TOUR VIDEO
@@ -251,7 +288,7 @@ const REFRAME = {
       emphasis: 'Delaying the decision doesn’t protect you — it costs you.',
     },
     {
-      bn: 'আমরা কিন্তু মাত্র ৬০% ধরেছি। ধরুন তাতেও অর্ধেক ভুল — তবুও প্রথম মাসেই পুরো খরচ উঠে আসে।',
+      bn: 'আমরা কিন্তু মাত্র 60% ধরেছি। ধরুন তাতেও অর্ধেক ভুল — তবুও প্রথম মাসেই পুরো খরচ উঠে আসে।',
       text: 'We counted only 60%. Even if we’re half wrong, it still pays for itself in the first month.',
     },
     {
@@ -259,7 +296,7 @@ const REFRAME = {
       text: 'The bigger your business, the bigger the leak — and the plan price never catches up to it.',
     },
   ],
-  pricingPunchBn: 'বেশিরভাগ business প্রতি মাসে NexaERP-এর দামের ৫–১২ গুণ চুপচাপ হারায়। প্রশ্নটা কখনোই ছিল না — “আমি কি এটা afford করতে পারব?” প্রশ্নটা হলো — “এই leak আমি কতদিন afford করব?”',
+  pricingPunchBn: 'বেশিরভাগ business প্রতি মাসে NexaERP-এর দামের 5–12 গুণ চুপচাপ হারায়। প্রশ্নটা কখনোই ছিল না — “আমি কি এটা afford করতে পারব?” প্রশ্নটা হলো — “এই leak আমি কতদিন afford করব?”',
   pricingPunch: 'Most businesses lose 5–12× the price of NexaERP every month, quietly. The question was never “can I afford it.” It’s “can I afford the leak.”',
 }
 
@@ -269,7 +306,7 @@ const REFRAME = {
  *     invented quotes to named clients (BPDB, DESCO, etc.).
  * ======================================================================== */
 const TESTIMONIALS = [
-  { quoteBn: 'Month-end-এ আগে ১৫ দিন চলে যেত। এখন ৫ তারিখেই books close, আর প্রতিটা number-এ আমি ভরসা রাখতে পারি।', quote: 'Month-end used to eat fifteen days. Now the books close on the fifth and I trust every number in them.', role: 'Finance Director', org: 'National Power Distributor' },
+  { quoteBn: 'Month-end-এ আগে 15 দিন চলে যেত। এখন 5 তারিখেই books close, আর প্রতিটা number-এ আমি ভরসা রাখতে পারি।', quote: 'Month-end used to eat fifteen days. Now the books close on the fifth and I trust every number in them.', role: 'Finance Director', org: 'National Power Distributor' },
   { quoteBn: 'আমার salesman-রা field থেকে order নেয়, signal না থাকলেও — আর আমি office থেকে real-time দেখি। সবাই একই data দেখছে।', quote: 'My salesmen take orders in the field, even with no signal, and I see it from my office in real time. Same data, everyone.', role: 'Head of Sales', org: 'FMCG Distribution Group' },
   { quoteBn: 'VAT audit যখন এলো, প্রতিটা Mushak document সেকেন্ডে ready ছিল। কোনো ছোটাছুটি নেই, stress নেই।', quote: 'When the VAT audit came, every Mushak document was ready in seconds. No scramble, no stress.', role: 'Chief Accountant', org: 'Mid-size Manufacturer' },
 ]
@@ -281,9 +318,9 @@ const TESTIMONIALS = [
  *      Leave blank to show the styled placeholder card.
  * ======================================================================== */
 const VIDEO_STORIES = [
-  { name: 'Customer name', role: 'Managing Director', org: 'Trading & Distribution', blurbBn: '১৫ দিনের month-end close যেভাবে ৫ দিনে নেমে এলো।', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
-  { name: 'Customer name', role: 'Head of Operations', org: 'Manufacturing', blurbBn: '৪টি warehouse-এ ৯৮%+ stock accuracy যেভাবে এলো।', blurb: 'Getting to 98%+ stock accuracy across 4 warehouses.', youtubeId: '' },
-  { name: 'Customer name', role: 'Finance Controller', org: 'Importer / Retail Chain', blurbBn: 'একটা login কীভাবে ১৫টা আলাদা app আর spreadsheet সরিয়ে দিল।', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
+  { name: 'Customer name', role: 'Managing Director', org: 'Trading & Distribution', blurbBn: '15 দিনের month-end close যেভাবে 5 দিনে নেমে এলো।', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
+  { name: 'Customer name', role: 'Head of Operations', org: 'Manufacturing', blurbBn: '4টি warehouse-এ 98%+ stock accuracy যেভাবে এলো।', blurb: 'Getting to 98%+ stock accuracy across 4 warehouses.', youtubeId: '' },
+  { name: 'Customer name', role: 'Finance Controller', org: 'Importer / Retail Chain', blurbBn: 'একটা login কীভাবে 15টা আলাদা app আর spreadsheet সরিয়ে দিল।', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
 ]
 
 /* ===========================================================================
@@ -374,12 +411,12 @@ const FAQ = [
 const FINAL = {
   headingBn: 'আপনার business আবার আপনার control-এ ফিরিয়ে আনুন।',
   heading: 'Bring your business back into control.',
-  subBn: 'কাল নয় — আজ। প্রতি মাস দেরি মানে আরও ৳৮–২০ লাখ hidden cost, চুপচাপ বেরিয়ে যাওয়া।',
+  subBn: 'কাল নয় — আজ। প্রতি মাস দেরি মানে আরও ৳8–20 লাখ hidden cost, চুপচাপ বেরিয়ে যাওয়া।',
   sub: 'Not tomorrow — today. Every month you wait is another ৳8–20 lakh in hidden cost, gone quietly.',
-  scarcityBn: 'এই quarter-এ মাত্র ৬টি onboarding slot খালি আছে।',
+  scarcityBn: 'এই quarter-এ মাত্র 6টি onboarding slot খালি আছে।',
   scarcity: 'Only 6 onboarding slots open this quarter.',
   primaryCta: 'Book your free demo',
-  riskReversalBn: 'Free ৩০ মিনিটের demo · pilot-এ commit করতে হবে না · comfortable হলে তবেই full deal।',
+  riskReversalBn: 'Free 30 মিনিটের demo · pilot-এ commit করতে হবে না · comfortable হলে তবেই full deal।',
   riskReversal: 'Free 30-min demo · No commitment to pilot · Full deal only when you’re comfortable.',
 }
 
@@ -520,7 +557,7 @@ export default function App() {
 
       <main id="top">
         <Hero />
-        <TrustMarquee />
+        <LogoWall />
         <Problem />
         <StatsBand />
         <Modules />
@@ -565,9 +602,53 @@ function Hero() {
           <p className="hero__risk">{HERO.riskReversal}</p>
         </div>
 
-        <DashboardMock />
+        <HeroVideo />
       </div>
     </section>
+  )
+}
+
+/* Product video in the hero banner (mp4 ambient loop, YouTube, or placeholder). */
+function HeroVideo() {
+  const [playing, setPlaying] = useState(false)
+  const hasMp4 = Boolean(HERO_VIDEO.mp4)
+  const hasYt = Boolean(HERO_VIDEO.youtubeId)
+  return (
+    <div className="hero-media">
+      <div className="hero-media__glow" aria-hidden="true" />
+      <div className="hero-media__frame">
+        {hasMp4 ? (
+          <video
+            className="hero-media__video"
+            src={HERO_VIDEO.mp4}
+            poster={HERO_VIDEO.poster || undefined}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="NexaERP product video"
+          />
+        ) : hasYt && playing ? (
+          <iframe
+            className="hero-media__video"
+            src={`https://www.youtube.com/embed/${HERO_VIDEO.youtubeId}?autoplay=1&rel=0`}
+            title="NexaERP product video"
+            allow="accelerated-encoder; autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            className="hero-media__poster"
+            onClick={() => hasYt && setPlaying(true)}
+            aria-label={hasYt ? 'Play product video' : 'Product video placeholder'}
+            style={hasYt ? { backgroundImage: `url(https://img.youtube.com/vi/${HERO_VIDEO.youtubeId}/maxresdefault.jpg)` } : undefined}
+          >
+            <span className="hero-media__play"><Play size={26} fill="currentColor" aria-hidden="true" /></span>
+            {!hasYt && <span className="hero-media__hint">Add a video — set HERO_VIDEO in App.jsx</span>}
+          </button>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -600,20 +681,63 @@ function Kpi({ label, value, trend, up }) {
   )
 }
 
-/* -------------------------------------------------------- TRUST MARQUEE --- */
-function TrustMarquee() {
-  const row = [...TRUST_CHIPS, ...TRUST_CHIPS]
+/* ----------------------------------------------------------- LOGO WALL --- */
+function LogoWall() {
+  const row = [...CLIENTS, ...CLIENTS] // duplicate for a seamless marquee loop
   return (
-    <section className="marquee" aria-label="Trusted by">
-      <p className="marquee__label">Mission-critical operations run on NexaERP</p>
-      <div className="marquee__track-wrap">
-        <div className="marquee__track">
-          {row.map((c, i) => (
-            <span key={i} className="chip">{c}</span>
-          ))}
+    <section className="trust" aria-label="Trusted by">
+      <p className="trust__label">Mission-critical operations run on NexaERP</p>
+
+      <div className="logos" aria-hidden="false">
+        <div className="logos__track">
+          {row.map((c, i) => <LogoTile key={i} client={c} />)}
+        </div>
+      </div>
+
+      <div className="regions">
+        <span className="regions__label">Serving teams across</span>
+        <div className="regions__list">
+          {REGIONS.map((r) => <FlagTile key={r.code} region={r} />)}
         </div>
       </div>
     </section>
+  )
+}
+
+function LogoTile({ client }) {
+  const [err, setErr] = useState(false)
+  return (
+    <div className="logo-tile" title={client.name}>
+      {err ? (
+        <span className="logo-tile__fallback">{client.name}</span>
+      ) : (
+        <img
+          className="logo-tile__img"
+          src={encodeURI(LOGO_DIR + client.file)}
+          alt={`${client.name} logo`}
+          loading="lazy"
+          onError={() => setErr(true)}
+        />
+      )}
+    </div>
+  )
+}
+
+function FlagTile({ region }) {
+  const [err, setErr] = useState(false)
+  return (
+    <span className="flag-tile">
+      {!err && (
+        <img
+          className="flag-tile__img"
+          src={`https://flagcdn.com/${region.code}.svg`}
+          alt={`${region.name} flag`}
+          loading="lazy"
+          onError={() => setErr(true)}
+        />
+      )}
+      <span className="flag-tile__name">{region.name}</span>
+    </span>
   )
 }
 
@@ -1429,20 +1553,21 @@ ul{margin:0;padding:0;list-style:none}
 .hero__ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px}
 .hero__risk{font-size:14px; color:var(--muted-2)}
 
-/* dashboard mock */
+/* hero media — product video banner */
 @keyframes fadeIn{to{opacity:1}}
-    <div className="dash dash--showcase" role="img" aria-label="NexaERP dashboard preview">
-      <div className="dash__stage">
-        <div className="dash__glow" aria-hidden="true" />
-        <div className="dash__shell">
-          <div className="dash__chrome">
-            <span className="dot" /><span className="dot" /><span className="dot" />
-            <span className="dash__url">app.nexaerp.com / dashboard</span>
-          </div>
-          <div className="dash__screen">
-            <img src="/images/gallery-1.png" alt="NexaERP gallery image 1" className="dash__screen-img" />
-          </div>
-        </div>
+.hero-media{position:relative; z-index:1; animation:rise .8s .2s both}
+.hero-media__glow{position:absolute; inset:-8% -6% auto auto; width:72%; height:86%; background:radial-gradient(circle at 30% 25%, rgba(40,184,63,.2), transparent 54%); filter:blur(42px); pointer-events:none; z-index:0}
+.hero-media__frame{position:relative; z-index:1; aspect-ratio:16/9; border-radius:20px; overflow:hidden; border:1px solid var(--line-2); background:#000; box-shadow:0 44px 130px rgba(0,0,0,.62)}
+.hero-media__video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:0; display:block}
+.hero-media__poster{position:absolute; inset:0; width:100%; height:100%; border:none; cursor:pointer; display:grid; place-items:center; gap:12px; background:linear-gradient(150deg,var(--bg-2),var(--bg)); background-size:cover; background-position:center}
+.hero-media__poster::after{content:''; position:absolute; inset:0; background:rgba(6,8,9,.3); transition:background .25s}
+.hero-media__poster:hover::after{background:rgba(6,8,9,.14)}
+.hero-media__play{position:relative; z-index:2; width:74px; height:74px; border-radius:50%; background:var(--green); color:#04210b; display:grid; place-items:center; box-shadow:0 8px 30px rgba(40,184,63,.45); transition:transform .2s, background .2s}
+.hero-media__play svg{margin-left:3px}
+.hero-media__poster:hover .hero-media__play{transform:scale(1.08); background:var(--green-hi)}
+.hero-media__hint{position:relative; z-index:2; font-size:12.5px; color:var(--muted-2)}
+
+/* legacy dashboard mock (kept for reference; not rendered) */
 .dash--showcase{padding:10px 0; position:relative; overflow:visible}
 .dash--showcase::before{content:''; position:absolute; inset:-8% -6% auto auto; width:72%; height:86%; background:radial-gradient(circle at 30% 25%, rgba(40,184,63,.18), transparent 54%); filter:blur(42px); pointer-events:none; z-index:0}
 .dash__stage{position:relative; z-index:1; padding-left:24px}
@@ -1465,14 +1590,23 @@ ul{margin:0;padding:0;list-style:none}
   .dash__screen{padding:32px}
 }
 
-/* ---- trust marquee ---- */
-.marquee{padding:30px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-2)}
-.marquee__label{text-align:center; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-2); margin:0 0 18px}
-.marquee__track-wrap{overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.marquee__track{display:flex; gap:14px; width:max-content; animation:scroll 26s linear infinite}
-.marquee:hover .marquee__track{animation-play-state:paused}
+/* ---- trust / logo wall ---- */
+.trust{padding:44px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-2)}
+.trust__label{text-align:center; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-2); margin:0 0 26px}
+.logos{overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.logos__track{display:flex; gap:18px; width:max-content; animation:scroll 48s linear infinite}
+.logos:hover .logos__track{animation-play-state:paused}
 @keyframes scroll{to{transform:translateX(-50%)}}
-.chip{border:1px solid var(--line-2); border-radius:999px; padding:9px 20px; font-weight:600; font-size:15px; color:var(--muted); white-space:nowrap}
+.logo-tile{flex:none; width:160px; height:84px; display:flex; align-items:center; justify-content:center; padding:14px 18px; background:#fff; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.35); transition:transform .2s}
+.logo-tile:hover{transform:translateY(-3px)}
+.logo-tile__img{display:block; width:100%; height:100%; object-fit:contain; object-position:center}
+.logo-tile__fallback{margin:auto; font-weight:700; font-size:15px; color:#1a1d21; text-align:center; line-height:1.2}
+
+.regions{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:14px 26px; margin-top:30px}
+.regions__label{font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-2)}
+.regions__list{display:flex; align-items:center; gap:22px; flex-wrap:wrap; justify-content:center}
+.flag-tile{display:inline-flex; align-items:center; gap:9px; font-weight:600; font-size:15px; color:var(--ink)}
+.flag-tile__img{width:30px; height:20px; object-fit:cover; border-radius:3px; box-shadow:0 1px 4px rgba(0,0,0,.5)}
 
 /* ---- problem ---- */
 .problem__grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
