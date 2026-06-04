@@ -39,6 +39,7 @@ import {
   ShieldCheck, Smartphone, Menu, X, Check, ChevronDown, ArrowRight, Zap,
   TrendingDown, Phone, Mail, MapPin, Quote, ScanLine, RefreshCw, Play,
   MessageCircle, CalendarClock, Calendar, Clock, User, ChevronLeft, ChevronRight,
+  Pause, Volume2, VolumeX, Maximize,
 } from 'lucide-react'
 
 /* ===========================================================================
@@ -65,6 +66,11 @@ const BRAND = {
 
 // wa.me deep link with a pre-filled message
 const waLink = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(BRAND.whatsappMsg)}`
+
+// REPLACE BEFORE LAUNCH — Crisp live-chat Website ID.
+// Get it at app.crisp.chat → Settings → Website Settings → Setup (the UUID in the snippet).
+// Leave blank to disable the chat bubble. The widget renders bottom-right automatically.
+const CRISP_WEBSITE_ID = 'eb42463f-8c69-4fd9-822e-a271d4cf9e51'
 
 /* ===========================================================================
  * 2. NAV
@@ -306,9 +312,9 @@ const REFRAME = {
  *     invented quotes to named clients (BPDB, DESCO, etc.).
  * ======================================================================== */
 const TESTIMONIALS = [
-  { quoteBn: 'Month-end-এ আগে 15 দিন চলে যেত। এখন 5 তারিখেই books close, আর প্রতিটা number-এ আমি ভরসা রাখতে পারি।', quote: 'Month-end used to eat fifteen days. Now the books close on the fifth and I trust every number in them.', role: 'Finance Director', org: 'National Power Distributor' },
-  { quoteBn: 'আমার salesman-রা field থেকে order নেয়, signal না থাকলেও — আর আমি office থেকে real-time দেখি। সবাই একই data দেখছে।', quote: 'My salesmen take orders in the field, even with no signal, and I see it from my office in real time. Same data, everyone.', role: 'Head of Sales', org: 'FMCG Distribution Group' },
-  { quoteBn: 'VAT audit যখন এলো, প্রতিটা Mushak document সেকেন্ডে ready ছিল। কোনো ছোটাছুটি নেই, stress নেই।', quote: 'When the VAT audit came, every Mushak document was ready in seconds. No scramble, no stress.', role: 'Chief Accountant', org: 'Mid-size Manufacturer' },
+  { quoteBn: 'Month-end-এ আগে 15 দিন চলে যেত। এখন 5 তারিখেই books close, আর প্রতিটা number-এ আমি ভরসা রাখতে পারি।', quote: 'Month-end used to eat fifteen days. Now the books close on the fifth and I trust every number in them.', name: 'Mr. Moshiur', org: 'Rahman Moshiur & Co.' },
+  { quoteBn: 'আমার salesman-রা field থেকে order নেয়, signal না থাকলেও — আর আমি office থেকে real-time দেখি। সবাই একই data দেখছে।', quote: 'My salesmen take orders in the field, even with no signal, and I see it from my office in real time. Same data, everyone.', name: 'Mr. Kamal Khan', org: 'LiqueMix' },
+  { quoteBn: 'VAT audit যখন এলো, প্রতিটা Mushak document সেকেন্ডে ready ছিল। কোনো ছোটাছুটি নেই, stress নেই।', quote: 'When the VAT audit came, every Mushak document was ready in seconds. No scramble, no stress.', name: 'Mr. Mostafizur Rahman', org: 'Seba Engineering Works' },
 ]
 
 /* ===========================================================================
@@ -318,9 +324,9 @@ const TESTIMONIALS = [
  *      Leave blank to show the styled placeholder card.
  * ======================================================================== */
 const VIDEO_STORIES = [
-  { name: 'Customer name', role: 'Managing Director', org: 'Trading & Distribution', blurbBn: '15 দিনের month-end close যেভাবে 5 দিনে নেমে এলো।', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
-  { name: 'Customer name', role: 'Head of Operations', org: 'Manufacturing', blurbBn: '4টি warehouse-এ 98%+ stock accuracy যেভাবে এলো।', blurb: 'Getting to 98%+ stock accuracy across 4 warehouses.', youtubeId: '' },
-  { name: 'Customer name', role: 'Finance Controller', org: 'Importer / Retail Chain', blurbBn: 'একটা login কীভাবে 15টা আলাদা app আর spreadsheet সরিয়ে দিল।', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
+  { name: 'Mr. Jamilur Rahman', org: 'ASK Trading', blurbBn: '15 দিনের month-end close যেভাবে 5 দিনে নেমে এলো।', blurb: 'How they cut month-end close from 15 days to 5.', youtubeId: '' },
+  { name: 'Mr. Mahabubur Rahaman', org: 'VIP Door & Furniture', blurbBn: '4টি warehouse-এ 98%+ stock accuracy যেভাবে এলো।', blurb: 'Getting to 98%+ stock accuracy across warehouses.', youtubeId: '' },
+  { name: 'Mrs. Nadia Nishu', org: 'Zariya Living', blurbBn: 'একটা login কীভাবে 15টা আলাদা app আর spreadsheet সরিয়ে দিল।', blurb: 'One login replaced 15 disconnected apps and spreadsheets.', youtubeId: '' },
 ]
 
 /* ===========================================================================
@@ -509,6 +515,18 @@ export default function App() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
+  // Crisp live chat — loads the bottom-right chat bubble when a Website ID is set
+  useEffect(() => {
+    if (!CRISP_WEBSITE_ID || document.getElementById('crisp-loader')) return
+    window.$crisp = window.$crisp || []
+    window.CRISP_WEBSITE_ID = CRISP_WEBSITE_ID
+    const s = document.createElement('script')
+    s.id = 'crisp-loader'
+    s.src = 'https://client.crisp.chat/l.js'
+    s.async = true
+    document.head.appendChild(s)
+  }, [])
+
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   return (
@@ -608,27 +626,26 @@ function Hero() {
   )
 }
 
-/* Product video in the hero banner (mp4 ambient loop, YouTube, or placeholder). */
+/* Product video in the hero banner (mp4 player, YouTube, or placeholder). */
 function HeroVideo() {
-  const [playing, setPlaying] = useState(false)
+  const [ytPlaying, setYtPlaying] = useState(false)
   const hasMp4 = Boolean(HERO_VIDEO.mp4)
   const hasYt = Boolean(HERO_VIDEO.youtubeId)
+
+  if (hasMp4) {
+    return (
+      <div className="hero-media">
+        <div className="hero-media__glow" aria-hidden="true" />
+        <Mp4Player src={HERO_VIDEO.mp4} poster={HERO_VIDEO.poster} />
+      </div>
+    )
+  }
+
   return (
     <div className="hero-media">
       <div className="hero-media__glow" aria-hidden="true" />
       <div className="hero-media__frame">
-        {hasMp4 ? (
-          <video
-            className="hero-media__video"
-            src={HERO_VIDEO.mp4}
-            poster={HERO_VIDEO.poster || undefined}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label="NexaERP product video"
-          />
-        ) : hasYt && playing ? (
+        {hasYt && ytPlaying ? (
           <iframe
             className="hero-media__video"
             src={`https://www.youtube.com/embed/${HERO_VIDEO.youtubeId}?autoplay=1&rel=0`}
@@ -639,7 +656,7 @@ function HeroVideo() {
         ) : (
           <button
             className="hero-media__poster"
-            onClick={() => hasYt && setPlaying(true)}
+            onClick={() => hasYt && setYtPlaying(true)}
             aria-label={hasYt ? 'Play product video' : 'Product video placeholder'}
             style={hasYt ? { backgroundImage: `url(https://img.youtube.com/vi/${HERO_VIDEO.youtubeId}/maxresdefault.jpg)` } : undefined}
           >
@@ -647,6 +664,106 @@ function HeroVideo() {
             {!hasYt && <span className="hero-media__hint">Add a video — set HERO_VIDEO in App.jsx</span>}
           </button>
         )}
+      </div>
+    </div>
+  )
+}
+
+/* Custom mp4 player — draggable seek, play/pause, mute, time, fullscreen. */
+function Mp4Player({ src, poster }) {
+  const videoRef = useRef(null)
+  const frameRef = useRef(null)
+  const seekingRef = useRef(false)
+  const [playing, setPlaying] = useState(true)
+  const [muted, setMuted] = useState(true)
+  const [cur, setCur] = useState(0)
+  const [dur, setDur] = useState(0)
+  const [hover, setHover] = useState(false)
+  const [full, setFull] = useState(false)
+
+  const togglePlay = () => {
+    const v = videoRef.current; if (!v) return
+    if (v.paused) v.play(); else v.pause()
+  }
+  const toggleMute = () => {
+    const v = videoRef.current; if (!v) return
+    v.muted = !v.muted; setMuted(v.muted)
+  }
+  const onSeek = (e) => {
+    const v = videoRef.current; if (!v) return
+    const t = Number(e.target.value)
+    v.currentTime = t; setCur(t)
+  }
+  const toggleFull = () => {
+    const el = frameRef.current; if (!el) return
+    if (document.fullscreenElement) document.exitFullscreen()
+    else el.requestFullscreen?.()
+  }
+  useEffect(() => {
+    const onFs = () => setFull(Boolean(document.fullscreenElement))
+    document.addEventListener('fullscreenchange', onFs)
+    return () => document.removeEventListener('fullscreenchange', onFs)
+  }, [])
+
+  const fmt = (s) => {
+    if (!Number.isFinite(s)) return '0:00'
+    const m = Math.floor(s / 60); const sec = Math.floor(s % 60)
+    return `${m}:${String(sec).padStart(2, '0')}`
+  }
+  const pct = dur ? (cur / dur) * 100 : 0
+
+  return (
+    <div
+      className={`hero-media__frame hvp ${hover || !playing ? 'hvp--active' : ''}`}
+      ref={frameRef}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <video
+        ref={videoRef}
+        className="hero-media__video"
+        src={src}
+        poster={poster || undefined}
+        autoPlay muted loop playsInline
+        onClick={togglePlay}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onTimeUpdate={(e) => { if (!seekingRef.current) setCur(e.currentTarget.currentTime) }}
+        onLoadedMetadata={(e) => setDur(e.currentTarget.duration)}
+        aria-label="NexaERP product video"
+      />
+
+      {!playing && (
+        <button className="hvp__bigplay" onClick={togglePlay} aria-label="Play">
+          <Play size={30} fill="currentColor" aria-hidden="true" />
+        </button>
+      )}
+
+      <div className="hvp__bar">
+        <button className="hvp__btn" onClick={togglePlay} aria-label={playing ? 'Pause' : 'Play'}>
+          {playing ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+        </button>
+        <span className="hvp__time">{fmt(cur)}</span>
+        <input
+          className="hvp__seek"
+          type="range"
+          min={0}
+          max={dur || 0}
+          step="0.05"
+          value={cur}
+          onChange={onSeek}
+          onPointerDown={() => { seekingRef.current = true }}
+          onPointerUp={() => { seekingRef.current = false }}
+          style={{ '--pct': `${pct}%` }}
+          aria-label="Seek"
+        />
+        <span className="hvp__time">{fmt(dur)}</span>
+        <button className="hvp__btn" onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'}>
+          {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
+        <button className="hvp__btn" onClick={toggleFull} aria-label={full ? 'Exit fullscreen' : 'Fullscreen'}>
+          <Maximize size={17} />
+        </button>
       </div>
     </div>
   )
@@ -1025,13 +1142,13 @@ function Testimonials() {
               <blockquote className="testimonial__quote bn">{t.quoteBn}</blockquote>
               <p className="testimonial__quote-en">{t.quote}</p>
               <figcaption className="testimonial__cap">
-                <span className="testimonial__role">{t.role}</span>
+                <span className="testimonial__role">{t.name}</span>
                 <span className="testimonial__org">{t.org}</span>
               </figcaption>
             </figure>
           ))}
         </div>
-        <p className="testimonials__note">Role-based examples shown — real client quotes available under NDA.</p>
+        <p className="testimonials__note">Real NexaERP customers. Quote wording shown is illustrative — replace with each customer’s own approved words before launch.</p>
       </div>
     </section>
   )
@@ -1088,7 +1205,7 @@ function StoryCard({ story }) {
         <p className="story__blurb-en">{story.blurb}</p>
         <div className="story__cap">
           <span className="story__name">{story.name}</span>
-          <span className="story__role">{story.role} · {story.org}</span>
+          <span className="story__role">{story.org}</span>
         </div>
       </div>
     </article>
@@ -1566,6 +1683,20 @@ ul{margin:0;padding:0;list-style:none}
 .hero-media__play svg{margin-left:3px}
 .hero-media__poster:hover .hero-media__play{transform:scale(1.08); background:var(--green-hi)}
 .hero-media__hint{position:relative; z-index:2; font-size:12.5px; color:var(--muted-2)}
+
+/* custom mp4 player controls */
+.hvp .hero-media__video{cursor:pointer}
+.hvp__bigplay{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; width:72px; height:72px; border-radius:50%; border:none; background:rgba(40,184,63,.92); color:#04210b; display:grid; place-items:center; cursor:pointer; box-shadow:0 8px 30px rgba(0,0,0,.45); transition:transform .2s, background .2s}
+.hvp__bigplay svg{margin-left:3px}
+.hvp__bigplay:hover{transform:translate(-50%,-50%) scale(1.08); background:var(--green-hi)}
+.hvp__bar{position:absolute; left:0; right:0; bottom:0; z-index:4; display:flex; align-items:center; gap:11px; padding:14px 16px 12px; background:linear-gradient(0deg,rgba(0,0,0,.72),transparent); opacity:0; transform:translateY(8px); transition:opacity .25s, transform .25s; pointer-events:none}
+.hvp--active .hvp__bar{opacity:1; transform:none; pointer-events:auto}
+.hvp__btn{display:grid; place-items:center; width:32px; height:32px; border:none; background:transparent; color:#fff; cursor:pointer; border-radius:8px; transition:color .2s, background .2s; flex:none}
+.hvp__btn:hover{color:var(--green-hi); background:rgba(255,255,255,.12)}
+.hvp__time{font-size:12px; color:#e7eee9; font-variant-numeric:tabular-nums; min-width:34px; text-align:center; flex:none}
+.hvp__seek{-webkit-appearance:none; appearance:none; flex:1; height:5px; border-radius:999px; background:linear-gradient(90deg,var(--green) var(--pct),rgba(255,255,255,.28) var(--pct)); outline:none; cursor:pointer}
+.hvp__seek::-webkit-slider-thumb{-webkit-appearance:none; width:15px; height:15px; border-radius:50%; background:var(--green-hi); border:2px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.5); cursor:pointer}
+.hvp__seek::-moz-range-thumb{width:15px; height:15px; border-radius:50%; background:var(--green-hi); border:2px solid #fff; cursor:pointer}
 
 /* legacy dashboard mock (kept for reference; not rendered) */
 .dash--showcase{padding:10px 0; position:relative; overflow:visible}
