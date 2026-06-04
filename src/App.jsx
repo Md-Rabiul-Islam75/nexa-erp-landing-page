@@ -151,6 +151,7 @@ const HERO_VIDEO = {
 const VIDEO = {
   kicker: 'See it in 2 minutes',
   heading: 'A guided tour of NexaERP.',
+  introBn: 'একটা transaction কীভাবে finance, inventory, VAT আর dashboard-এ ছড়িয়ে যায় দেখুন — পুরো business এক system-এ।',
   intro: 'Watch one transaction flow through finance, inventory, VAT and the dashboard — the whole business, in one system.',
   embedUrl: '',
   poster: { duration: '2:14', caption: 'NexaERP product tour' },
@@ -162,16 +163,19 @@ const VIDEO = {
 const PROBLEM = {
   kicker: 'The cost you never see on an invoice',
   heading: 'Every month, money leaks out — quietly.',
+  introBn: 'এই খরচগুলো কখনো invoice-এ আসে না — কিন্তু প্রতি মাসেই চুপচাপ আপনার business থেকে বেরিয়ে যায়।',
   intro: 'These costs never show up on a bill. But every month, they walk straight out of your business.',
   cards: [
-    { icon: TrendingDown, title: 'Stockout — lost sales', amount: '৳2–5 lakh', per: '/mo', desc: 'The customer came, the product wasn’t there. They went straight to a competitor.' },
-    { icon: Boxes, title: 'Capital frozen in dead stock', amount: '৳5–10 lakh', per: '/mo', desc: 'Inventory that piles up year after year — cash-flow frozen, nobody watching it.' },
-    { icon: Wallet, title: 'Late-payment recovery', amount: '৳1–3 lakh', per: '/mo', desc: 'Customers pay in 60–90 days. They’re using your working capital, for free.' },
-    { icon: RefreshCw, title: 'Manual labour & rework', amount: '৳50k–1 lakh', per: '/mo', desc: 'Reconciling Excel, double entry, fixing errors — staff time on paperwork, not output.' },
-    { icon: ReceiptText, title: 'VAT / NBR penalty risk', amount: '৳1 lakh+', per: '/mo', desc: 'Wrong Mushak format, late return, audit finding — a penalty can land any time.' },
-    { icon: Zap, title: 'Cost of a wrong decision', amount: 'Incalculable', per: '', desc: 'Wrong number → wrong decision. Wrong price, wrong discount, wrong hire.' },
+    { icon: TrendingDown, title: 'Stockout — lost sales', amount: '৳2–5 lakh', per: '/mo', descBn: 'Customer এলেন, কিন্তু product নেই — সোজা চলে গেলেন competitor-এর কাছে।', desc: 'The customer came, the product wasn’t there. They went straight to a competitor.' },
+    { icon: Boxes, title: 'Capital frozen in dead stock', amount: '৳5–10 lakh', per: '/mo', descBn: 'যে inventory বছরের পর বছর জমে থাকে — cash আটকে, অথচ কেউ খেয়াল রাখছে না।', desc: 'Inventory that piles up year after year — cash-flow frozen, nobody watching it.' },
+    { icon: Wallet, title: 'Late-payment recovery', amount: '৳1–3 lakh', per: '/mo', descBn: 'Customer 60–90 দিনে pay করেন। আপনার working capital তাঁরা বিনা খরচে ব্যবহার করছেন।', desc: 'Customers pay in 60–90 days. They’re using your working capital, for free.' },
+    { icon: RefreshCw, title: 'Manual labour & rework', amount: '৳50k–1 lakh', per: '/mo', descBn: 'Excel মেলানো, double-entry, error ঠিক করা — staff-এর সময় কাজে নয়, কাগজে যাচ্ছে।', desc: 'Reconciling Excel, double entry, fixing errors — staff time on paperwork, not output.' },
+    { icon: ReceiptText, title: 'VAT / NBR penalty risk', amount: '৳1 lakh+', per: '/mo', descBn: 'ভুল Mushak format, late return, audit finding — যেকোনো সময় penalty আসতে পারে।', desc: 'Wrong Mushak format, late return, audit finding — a penalty can land any time.' },
+    { icon: Zap, title: 'Cost of a wrong decision', amount: 'Incalculable', per: '', descBn: 'ভুল number → ভুল সিদ্ধান্ত। ভুল price, ভুল discount, ভুল hire।', desc: 'Wrong number → wrong decision. Wrong price, wrong discount, wrong hire.' },
   ],
+  totalBn: 'মোট hidden cost: মাসে ৳8–20 লাখ। বছরে ৳1 কোটি+।',
   total: 'Total hidden cost: ৳8–20 lakh a month. ৳1 crore+ a year.',
+  turnBn: 'NexaERP এই প্রতিটি ঘাটতি সম্পূর্ণভাবে দূর করে দেয়।',
   turn: 'NexaERP closes every one of these gaps.',
 }
 
@@ -179,32 +183,32 @@ const PROBLEM = {
  * 6. STATS BAND — honest, defensible facts only (no fabricated user counts)
  * ======================================================================== */
 const STATS = [
-  { value: 9, suffix: '', label: 'Years in production since 2016' },
-  { value: 0, suffix: '', label: 'Debt — cash-positive & independent' },
-  { value: 4, suffix: '', label: 'National utilities run on NexaERP' },
-  { value: 16, suffix: '', label: 'Modules on one platform' },
+  { value: 9, suffix: '', labelBn: '2016 থেকে production-এ — বছর', label: 'Years in production since 2016' },
+  { value: 0, suffix: '', labelBn: 'Debt নেই — cash-positive ও স্বাধীন', label: 'Debt — cash-positive & independent' },
+  { value: 4, suffix: '', labelBn: 'জাতীয় utility NexaERP-তে চলে', label: 'National utilities run on NexaERP' },
+  { value: 16, suffix: '', labelBn: 'এক platform-এ module', label: 'Modules on one platform' },
 ]
 
 /* ===========================================================================
  * 7. MODULES — benefit-led (outcome first). 16 real modules from the deck.
  * ======================================================================== */
 const MODULES = [
-  { icon: Wallet, name: 'Financial Accounts', outcome: 'Books closed by the 5th — not the 15th. Click any number, drill to the voucher.' },
-  { icon: ShoppingCart, name: 'Sales & Distribution', outcome: 'Field salesmen take orders on mobile, even offline. Credit limit checked at entry.' },
-  { icon: PackageOpen, name: 'Purchase & Procurement', outcome: 'Three-way match auto-checks PO, GRN and invoice. Approve POs from your phone.' },
-  { icon: Boxes, name: 'Inventory & Warehouse', outcome: '98%+ stock accuracy in 90 days. What the screen shows is what’s in the godown.' },
-  { icon: Factory, name: 'Manufacturing', outcome: 'Multi-level BOM to shop-floor reality — the true cost of every product you make.' },
-  { icon: Ship, name: 'LC & Import', outcome: 'PI to landed cost on one screen. No BOE, no charge, no document ever lost.' },
-  { icon: Users, name: 'Human Resources', outcome: 'Hire to retire in one record. Biometric attendance, mobile leave approval.' },
-  { icon: BadgeDollarSign, name: 'Payroll', outcome: 'Payroll for 1,000 staff in 30 minutes. BEFTN/RTGS bank advice, ready to send.' },
-  { icon: Building2, name: 'Fixed Assets', outcome: 'Every asset tracked, depreciated and reconciled — automatically, to the GL.' },
-  { icon: ClipboardList, name: 'Project & Job Costing', outcome: 'See the real profit on every project and job — material, labour and overhead.' },
-  { icon: HeartHandshake, name: 'CRM', outcome: 'Customer 360: last 12 months of orders, payments and complaints on one screen.' },
-  { icon: ReceiptText, name: 'VAT, Tax & Compliance', outcome: 'Mushak 6.3, 9.1, AIT and Form 50 — NBR-ready, generated out of the box.' },
-  { icon: BarChart3, name: 'Reports & Dashboards', outcome: 'Role-based live dashboards. Build your own report — no IT ticket required.' },
-  { icon: FileCheck2, name: 'Document & Approval', outcome: 'Every approval on mobile, one tap. Nothing waits on a boss who’s travelling.' },
-  { icon: ShieldCheck, name: 'Security & Admin', outcome: 'Row-level access, SSO/SAML, tamper-evident audit log. Nobody edits silently.' },
-  { icon: Smartphone, name: 'Mobile App & Portals', outcome: 'Native Android & iOS. Customer and supplier self-service portals built in.' },
+  { icon: Wallet, name: 'Financial Accounts', outcomeBn: 'Books 5 তারিখেই close — 15 তারিখে নয়। যেকোনো number-এ click করে voucher পর্যন্ত drill করুন।', outcome: 'Books closed by the 5th — not the 15th. Click any number, drill to the voucher.' },
+  { icon: ShoppingCart, name: 'Sales & Distribution', outcomeBn: 'Field salesman mobile-এ order নেয়, offline-ও। Entry-তেই credit limit check হয়।', outcome: 'Field salesmen take orders on mobile, even offline. Credit limit checked at entry.' },
+  { icon: PackageOpen, name: 'Purchase & Procurement', outcomeBn: 'Three-way match নিজে থেকেই PO, GRN ও invoice মিলিয়ে দেখে। PO approve করুন phone থেকেই।', outcome: 'Three-way match auto-checks PO, GRN and invoice. Approve POs from your phone.' },
+  { icon: Boxes, name: 'Inventory & Warehouse', outcomeBn: '90 দিনে 98%+ stock accuracy। screen-এ যা দেখায়, godown-এ ঠিক তাই।', outcome: '98%+ stock accuracy in 90 days. What the screen shows is what’s in the godown.' },
+  { icon: Factory, name: 'Manufacturing', outcomeBn: 'Multi-level BOM থেকে shop-floor reality — প্রতিটা product-এর সঠিক cost।', outcome: 'Multi-level BOM to shop-floor reality — the true cost of every product you make.' },
+  { icon: Ship, name: 'LC & Import', outcomeBn: 'PI থেকে landed cost এক screen-এ। কোনো BOE, charge বা document হারায় না।', outcome: 'PI to landed cost on one screen. No BOE, no charge, no document ever lost.' },
+  { icon: Users, name: 'Human Resources', outcomeBn: 'Hire থেকে retire এক record-এ। Biometric attendance, mobile-এ leave approval।', outcome: 'Hire to retire in one record. Biometric attendance, mobile leave approval.' },
+  { icon: BadgeDollarSign, name: 'Payroll', outcomeBn: '1,000 staff-এর payroll 30 মিনিটে। BEFTN/RTGS bank advice, পাঠানোর জন্য ready।', outcome: 'Payroll for 1,000 staff in 30 minutes. BEFTN/RTGS bank advice, ready to send.' },
+  { icon: Building2, name: 'Fixed Assets', outcomeBn: 'প্রতিটা asset track, depreciate ও reconcile — নিজে থেকেই GL-এ।', outcome: 'Every asset tracked, depreciated and reconciled — automatically, to the GL.' },
+  { icon: ClipboardList, name: 'Project & Job Costing', outcomeBn: 'প্রতিটা project ও job-এর আসল profit দেখুন — material, labour ও overhead সহ।', outcome: 'See the real profit on every project and job — material, labour and overhead.' },
+  { icon: HeartHandshake, name: 'CRM', outcomeBn: 'Customer 360: গত 12 মাসের order, payment ও complaint এক screen-এ।', outcome: 'Customer 360: last 12 months of orders, payments and complaints on one screen.' },
+  { icon: ReceiptText, name: 'VAT, Tax & Compliance', outcomeBn: 'Mushak 6.3, 9.1, AIT ও Form 50 — NBR-ready, box থেকেই তৈরি।', outcome: 'Mushak 6.3, 9.1, AIT and Form 50 — NBR-ready, generated out of the box.' },
+  { icon: BarChart3, name: 'Reports & Dashboards', outcomeBn: 'Role অনুযায়ী live dashboard। নিজের report বানান — IT ticket লাগে না।', outcome: 'Role-based live dashboards. Build your own report — no IT ticket required.' },
+  { icon: FileCheck2, name: 'Document & Approval', outcomeBn: 'প্রতিটা approval mobile-এ, এক tap-এ। Boss travel-এ থাকলেও কিছু আটকে থাকে না।', outcome: 'Every approval on mobile, one tap. Nothing waits on a boss who’s travelling.' },
+  { icon: ShieldCheck, name: 'Security & Admin', outcomeBn: 'Row-level access, SSO/SAML, tamper-evident audit log। কেউ চুপিচুপি edit করতে পারে না।', outcome: 'Row-level access, SSO/SAML, tamper-evident audit log. Nobody edits silently.' },
+  { icon: Smartphone, name: 'Mobile App & Portals', outcomeBn: 'Native Android ও iOS। Customer ও supplier-এর self-service portal built-in।', outcome: 'Native Android & iOS. Customer and supplier self-service portals built in.' },
 ]
 
 /* ===========================================================================
@@ -214,12 +218,13 @@ const MAGIC = {
   kicker: 'One click. Five updates. Zero reconciliation.',
   heading: 'A warehouse clerk scans one goods receipt. Watch what happens.',
   steps: [
-    { icon: ScanLine, title: 'Goods receipt', desc: 'Warehouse scans the barcode.' },
-    { icon: Boxes, title: 'Inventory ↑', desc: 'Stock and GL inventory update.' },
-    { icon: Wallet, title: 'Payable created', desc: 'Supplier liability is booked.' },
-    { icon: ReceiptText, title: 'VAT register', desc: 'Mushak 6.6 captured automatically.' },
-    { icon: BarChart3, title: 'Dashboard', desc: 'The CEO sees it, instantly.' },
+    { icon: ScanLine, title: 'Goods receipt', descBn: 'Warehouse barcode scan করে।', desc: 'Warehouse scans the barcode.' },
+    { icon: Boxes, title: 'Inventory ↑', descBn: 'Stock ও GL inventory update হয়।', desc: 'Stock and GL inventory update.' },
+    { icon: Wallet, title: 'Payable created', descBn: 'Supplier-এর liability book হয়।', desc: 'Supplier liability is booked.' },
+    { icon: ReceiptText, title: 'VAT register', descBn: 'Mushak 6.6 নিজে থেকেই capture হয়।', desc: 'Mushak 6.6 captured automatically.' },
+    { icon: BarChart3, title: 'Dashboard', descBn: 'CEO সঙ্গে সঙ্গে দেখেন।', desc: 'The CEO sees it, instantly.' },
   ],
+  closeBn: 'One click। Five update। Zero re-entry। আজ আপনার system-এ এই একটা transaction কতজন মানুষ, কত screen আর কত spreadsheet ছুঁয়ে যায়?',
   close: 'One click. Five updates. Zero re-entry. How many people, screens and spreadsheets does that one transaction touch in your system today?',
 }
 
@@ -229,33 +234,36 @@ const MAGIC = {
 const WAREHOUSE = {
   kicker: 'Multi-warehouse, multi-location',
   heading: 'Many locations. One clean set of books.',
+  introBn: 'প্রতিটা warehouse ও location-এর জন্য আলাদা, accurate হিসাব রাখুন — তবু পুরো company-কে একসাথে দেখুন। আপনার business অনুযায়ী আমরা দুটি প্রমাণিত পদ্ধতির যেকোনো একটিতে setup করে দিই।',
   intro: 'Run separate, accurate accounts for every warehouse and location — and still see the whole company as one. We set it up your way, in one of two proven methods.',
   methods: [
     {
       tag: 'Method 1',
       title: 'Account-group based',
+      descBn: 'প্রতি warehouse-এ আলাদা account group, যাতে প্রতিটা location-এর cost আলাদাভাবে track হয়।',
       desc: 'A separate account group per warehouse, so every location’s cost is tracked on its own.',
       points: [
-        'Ledgers per location — e.g. “Electricity Bill – Loc-A”, “Electricity Bill – Loc-B”',
-        'Same ledger name, location short-codes keep them cleanly apart',
-        'Trial Balance reads by account group — location cost analysis is effortless',
+        { bn: 'প্রতি location-এ আলাদা ledger — যেমন “Electricity Bill – Loc-A”, “Electricity Bill – Loc-B”', en: 'Ledgers per location — e.g. “Electricity Bill – Loc-A”, “Electricity Bill – Loc-B”' },
+        { bn: 'একই ledger নাম, location short-code দিয়ে পরিষ্কারভাবে আলাদা থাকে', en: 'Same ledger name, location short-codes keep them cleanly apart' },
+        { bn: 'Trial Balance account group অনুযায়ী দেখায় — location-ভিত্তিক cost analysis সহজ', en: 'Trial Balance reads by account group — location cost analysis is effortless' },
       ],
     },
     {
       tag: 'Method 2',
       title: 'Project based',
+      descBn: 'প্রতিটা warehouse একেকটা project। একটাই shared chart of accounts; post করার সময় warehouse বেছে নিন।',
       desc: 'Each warehouse is a project. One shared chart of accounts; pick the warehouse when you post.',
       points: [
-        'Select the specific project (warehouse) as you post each voucher',
-        'Assign specific projects to specific users',
-        'Project-wise Profit & Loss — control every location centrally, analyse each one apart',
+        { bn: 'প্রতিটা voucher post করার সময় নির্দিষ্ট project (warehouse) select করুন', en: 'Select the specific project (warehouse) as you post each voucher' },
+        { bn: 'নির্দিষ্ট user-কে নির্দিষ্ট project assign করুন', en: 'Assign specific projects to specific users' },
+        { bn: 'Project-wise Profit & Loss — সব location কেন্দ্রীয়ভাবে control করুন, প্রতিটা আলাদা করে analyse করুন', en: 'Project-wise Profit & Loss — control every location centrally, analyse each one apart' },
       ],
     },
   ],
   access: [
-    'User-wise report access — each user sees only their assigned data',
-    'Users view their own transactions; Admin sees the whole company',
-    'Trial Balance across all warehouses combined, or by account group',
+    { bn: 'User-wise report access — প্রতিটা user শুধু তার assigned data দেখে', en: 'User-wise report access — each user sees only their assigned data' },
+    { bn: 'User নিজের transaction দেখে; Admin পুরো company দেখেন', en: 'Users view their own transactions; Admin sees the whole company' },
+    { bn: 'সব warehouse মিলিয়ে, অথবা account group অনুযায়ী Trial Balance', en: 'Trial Balance across all warehouses combined, or by account group' },
   ],
 }
 
@@ -263,17 +271,18 @@ const WAREHOUSE = {
  * 10. HOW IT WORKS — 90-day roadmap, effort reduction
  * ======================================================================== */
 const STEPS = [
-  { week: 'Week 1–2', title: 'Discovery', desc: 'We learn your process, list the pain points, and set priorities together.' },
-  { week: 'Week 3–6', title: 'Configuration', desc: 'Chart of accounts, master data, workflows and approval matrix — built to your business.' },
-  { week: 'Week 7–10', title: 'Training & pilot', desc: 'Role-based training in Bangla. We pilot one process until your team is comfortable.' },
-  { week: 'Week 11–13', title: 'Cutover & go-live', desc: 'Parallel run, data migration, final cutover — with 30 days of hyper-care support.' },
-  { week: 'Day 100', title: 'In control', desc: 'Books close by the 5th. Live dashboards. A monthly review meeting with us.' },
+  { week: 'Week 1–2', title: 'Discovery', descBn: 'আমরা আপনার process বুঝি, pain point list করি, আর একসাথে priority ঠিক করি।', desc: 'We learn your process, list the pain points, and set priorities together.' },
+  { week: 'Week 3–6', title: 'Configuration', descBn: 'Chart of accounts, master data, workflow ও approval matrix — আপনার business অনুযায়ী তৈরি।', desc: 'Chart of accounts, master data, workflows and approval matrix — built to your business.' },
+  { week: 'Week 7–10', title: 'Training & pilot', descBn: 'বাংলায় role-based training। একটা process-এ pilot চালাই, যতক্ষণ না আপনার team comfortable হয়।', desc: 'Role-based training in Bangla. We pilot one process until your team is comfortable.' },
+  { week: 'Week 11–13', title: 'Cutover & go-live', descBn: 'Parallel run, data migration, final cutover — সঙ্গে 30 দিনের hyper-care support।', desc: 'Parallel run, data migration, final cutover — with 30 days of hyper-care support.' },
+  { week: 'Day 100', title: 'In control', descBn: 'Books 5 তারিখে close। Live dashboard। আমাদের সাথে monthly review meeting।', desc: 'Books close by the 5th. Live dashboards. A monthly review meeting with us.' },
 ]
 
 /* ===========================================================================
  * 11. ROI CALCULATOR defaults & assumption
  * ======================================================================== */
 const ROI = {
+  assumptionNoteBn: 'ধরা হয়েছে manual সময়ের ~60% ফেরত আসে — ইচ্ছে করেই conservative।',
   assumptionNote: 'Assumes ~60% of manual hours reclaimed — deliberately conservative.',
   defaults: { team: 12, hoursLost: 9, costPerHour: 450 },
   reclaimRate: 0.6,
@@ -338,6 +347,7 @@ const PRICING = {
   tiers: [
     {
       name: 'Starter',
+      blurbBn: 'Small business-এ control আনুন — minimum দিয়ে শুরু।',
       blurb: 'Bring control to a small business — start with the minimum.',
       setup: 10000,
       monthly: 2000,
@@ -355,6 +365,7 @@ const PRICING = {
     },
     {
       name: 'Business',
+      blurbBn: 'বেশিরভাগ growing SME যেখানে শুরু করে — best value for money।',
       blurb: 'Where most growing SMEs start — the best value for money.',
       setup: 20000,
       monthly: 10000,
@@ -375,6 +386,7 @@ const PRICING = {
     },
     {
       name: 'Enterprise',
+      blurbBn: 'Scale-এ পৌঁছানো company-র জন্য full enterprise-grade capability।',
       blurb: 'Full enterprise-grade capability for companies at scale.',
       setup: 200000,
       monthly: 80000,
@@ -403,12 +415,12 @@ const PRICING = {
  * 14. FAQ — objection handling
  * ======================================================================== */
 const FAQ = [
-  { q: 'How long until we’re live?', a: 'A structured 90-day rollout — not a big-bang gamble. Discovery, configuration, training and a pilot, then cutover with 30 days of hyper-care. You sign off at every phase before we move on.' },
-  { q: 'Will it scale as we grow?', a: 'Every module is built to grow up to 10× with your business — no system change required. NexaERP already handles monthly billing of billions of taka for national electricity utilities.' },
-  { q: 'We already use other software. How do we migrate?', a: 'We run a parallel period and migrate your master data and balances during configuration. You keep working while we move, and we reconcile before final cutover — no lost history.' },
-  { q: 'Is our data safe, and is the company stable?', a: 'Encrypted in transit and at rest, daily backups, a tested disaster-recovery plan, and a tamper-evident audit log. ASL is a debt-free, cash-positive company that has been in production since 2016 — never missed a payroll.' },
-  { q: 'Do you handle NBR / VAT compliance?', a: 'Out of the box. Mushak 6.3 on every invoice, Mushak 9.1 monthly return with registers, AIT/TDS auto-deduction and Form 50. When NBR rules change, we update the system — your team doesn’t have to.' },
-  { q: 'Can it work across countries and currencies?', a: 'Yes — multi-company, multi-branch and multi-currency are built in, with delivery teams in Dhaka and New York for local and overseas operations.' },
+  { q: 'How long until we’re live?', aBn: 'Structured 90-day rollout — big-bang জুয়া নয়। Discovery, configuration, training ও pilot, তারপর cutover-এর সাথে 30 দিনের hyper-care। প্রতিটা phase-এ আপনি sign-off করেন, তারপরই পরের ধাপ।', a: 'A structured 90-day rollout — not a big-bang gamble. Discovery, configuration, training and a pilot, then cutover with 30 days of hyper-care. You sign off at every phase before we move on.' },
+  { q: 'Will it scale as we grow?', aBn: 'প্রতিটা module আপনার business-এর সাথে 10× পর্যন্ত grow করতে পারে — system বদলাতে হয় না। NexaERP ইতিমধ্যেই জাতীয় বিদ্যুৎ utility-র মাসে শত কোটি টাকার billing handle করে।', a: 'Every module is built to grow up to 10× with your business — no system change required. NexaERP already handles monthly billing of billions of taka for national electricity utilities.' },
+  { q: 'We already use other software. How do we migrate?', aBn: 'আমরা একটা parallel period চালাই এবং configuration-এর সময় আপনার master data ও balance migrate করি। আপনি কাজ চালিয়ে যান, আমরা move করি, আর final cutover-এর আগে reconcile করি — কোনো history হারায় না।', a: 'We run a parallel period and migrate your master data and balances during configuration. You keep working while we move, and we reconcile before final cutover — no lost history.' },
+  { q: 'Is our data safe, and is the company stable?', aBn: 'Transit ও at-rest উভয় ক্ষেত্রেই encrypted, প্রতিদিন backup, tested disaster-recovery plan, আর tamper-evident audit log। ASL একটি debt-free, cash-positive company, 2016 থেকে production-এ — কখনো payroll miss করেনি।', a: 'Encrypted in transit and at rest, daily backups, a tested disaster-recovery plan, and a tamper-evident audit log. ASL is a debt-free, cash-positive company that has been in production since 2016 — never missed a payroll.' },
+  { q: 'Do you handle NBR / VAT compliance?', aBn: 'Box থেকেই। প্রতিটা invoice-এ Mushak 6.3, register সহ Mushak 9.1 monthly return, AIT/TDS auto-deduction আর Form 50। NBR rule বদলালে আমরা system update করি — আপনার team-কে করতে হয় না।', a: 'Out of the box. Mushak 6.3 on every invoice, Mushak 9.1 monthly return with registers, AIT/TDS auto-deduction and Form 50. When NBR rules change, we update the system — your team doesn’t have to.' },
+  { q: 'Can it work across countries and currencies?', aBn: 'হ্যাঁ — multi-company, multi-branch ও multi-currency built-in, আর Dhaka ও New York-এ delivery team দিয়ে local ও overseas operation।', a: 'Yes — multi-company, multi-branch and multi-currency are built in, with delivery teams in Dhaka and New York for local and overseas operations.' },
 ]
 
 /* ===========================================================================
@@ -438,7 +450,7 @@ const BOOKING = {
   subBn: 'তারিখ আর slot বেছে আপনার তথ্য দিন — WhatsApp-এ সঙ্গে সঙ্গে confirm হবে।',
   sub: 'Choose a date and slot, add your details — it confirms instantly on WhatsApp.',
   daysAhead: 45,            // how far ahead visitors can book
-  disabledWeekdays: [5],    // 5 = Friday (weekend in BD). Empty array = all days open.
+  disabledWeekdays: [5, 6], // 5 = Friday, 6 = Saturday (BD weekend). Empty array = all days open.
   slots: ['10:00 am', '11:00 am', '12:00 pm', '02:00 pm', '03:00 pm', '04:00 pm', '05:00 pm'],
 }
 
@@ -501,6 +513,7 @@ const fmtBDT = (n) =>
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -515,16 +528,27 @@ export default function App() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  // Crisp live chat — loads the bottom-right chat bubble when a Website ID is set
+  // Crisp live chat — hide Crisp's default launcher and drive it from our own
+  // animated (trembling) chat button, so we control the attention animation.
   useEffect(() => {
     if (!CRISP_WEBSITE_ID || document.getElementById('crisp-loader')) return
     window.$crisp = window.$crisp || []
     window.CRISP_WEBSITE_ID = CRISP_WEBSITE_ID
+    window.$crisp.push(['do', 'chat:hide'])
+    window.$crisp.push(['on', 'chat:opened', () => setChatOpen(true)])
+    window.$crisp.push(['on', 'chat:closed', () => { window.$crisp.push(['do', 'chat:hide']); setChatOpen(false) }])
     const s = document.createElement('script')
     s.id = 'crisp-loader'
     s.src = 'https://client.crisp.chat/l.js'
     s.async = true
     document.head.appendChild(s)
+  }, [])
+
+  const openChat = useCallback(() => {
+    if (!window.$crisp) return
+    window.$crisp.push(['do', 'chat:show'])
+    window.$crisp.push(['do', 'chat:open'])
+    setChatOpen(true)
   }, [])
 
   const closeMenu = useCallback(() => setMenuOpen(false), [])
@@ -593,6 +617,13 @@ export default function App() {
       </main>
 
       <Footer />
+
+      {CRISP_WEBSITE_ID && !chatOpen && (
+        <button className="chat-fab" onClick={openChat} aria-label="Chat with us">
+          <span className="chat-fab__ring" aria-hidden="true" />
+          <MessageCircle size={26} aria-hidden="true" />
+        </button>
+      )}
     </div>
   )
 }
@@ -864,20 +895,20 @@ function Problem() {
   return (
     <section id="problem" className="section problem">
       <div className="container">
-        <SectionHead kicker={PROBLEM.kicker} kickerDanger heading={PROBLEM.heading} intro={PROBLEM.intro} />
+        <SectionHead kicker={PROBLEM.kicker} kickerDanger heading={PROBLEM.heading} introBn={PROBLEM.introBn} intro={PROBLEM.intro} />
         <div ref={ref} className={`problem__grid ${shown ? 'in' : ''}`}>
           {PROBLEM.cards.map((c, i) => (
             <article key={c.title} className="loss-card" style={{ transitionDelay: `${i * 70}ms` }}>
               <c.icon className="loss-card__icon" size={22} aria-hidden="true" />
               <h3 className="loss-card__title">{c.title}</h3>
               <p className="loss-card__amount">{c.amount}<span className="loss-card__per">{c.per}</span></p>
-              <p className="loss-card__desc">{c.desc}</p>
+              <p className="loss-card__desc bn">{c.descBn}<span className="en-sub">{c.desc}</span></p>
             </article>
           ))}
         </div>
         <div className="problem__total">
-          <p className="problem__total-text">{PROBLEM.total}</p>
-          <p className="problem__turn">{PROBLEM.turn}</p>
+          <p className="problem__total-text bn">{PROBLEM.totalBn}<span className="en-sub">{PROBLEM.total}</span></p>
+          <p className="problem__turn bn">{PROBLEM.turnBn}<span className="en-sub">{PROBLEM.turn}</span></p>
         </div>
       </div>
     </section>
@@ -892,7 +923,7 @@ function StatsBand() {
         {STATS.map((s) => (
           <div key={s.label} className="stat">
             <span className="stat__value"><CountUp end={s.value} suffix={s.suffix} /></span>
-            <span className="stat__label">{s.label}</span>
+            <span className="stat__label bn">{s.labelBn}<span className="en-sub">{s.label}</span></span>
           </div>
         ))}
       </div>
@@ -916,7 +947,7 @@ function Modules() {
             <article key={m.name} className="module" style={{ transitionDelay: `${(i % 4) * 60}ms` }}>
               <div className="module__icon"><m.icon size={20} aria-hidden="true" /></div>
               <h3 className="module__name">{m.name}</h3>
-              <p className="module__outcome">{m.outcome}</p>
+              <p className="module__outcome bn">{m.outcomeBn}<span className="en-sub">{m.outcome}</span></p>
             </article>
           ))}
         </div>
@@ -932,7 +963,7 @@ function Video() {
   return (
     <section id="tour" className="section video">
       <div className="container">
-        <SectionHead kicker={VIDEO.kicker} heading={VIDEO.heading} intro={VIDEO.intro} center />
+        <SectionHead kicker={VIDEO.kicker} heading={VIDEO.heading} introBn={VIDEO.introBn} intro={VIDEO.intro} center />
         <div className="video__frame">
           <div className="video__glow" aria-hidden="true" />
           {playing && hasVideo ? (
@@ -982,12 +1013,12 @@ function MagicMoment() {
               <div className="magic__num">{i + 1}</div>
               <div className="magic__icon"><s.icon size={22} aria-hidden="true" /></div>
               <h3 className="magic__title">{s.title}</h3>
-              <p className="magic__desc">{s.desc}</p>
+              <p className="magic__desc bn">{s.descBn}<span className="en-sub">{s.desc}</span></p>
               {i < MAGIC.steps.length - 1 && <ArrowRight className="magic__arrow" size={18} aria-hidden="true" />}
             </div>
           ))}
         </div>
-        <p className="magic__close">{MAGIC.close}</p>
+        <p className="magic__close bn">{MAGIC.closeBn}<span className="en-sub">{MAGIC.close}</span></p>
       </div>
     </section>
   )
@@ -998,16 +1029,16 @@ function Warehouse() {
   return (
     <section className="section warehouse">
       <div className="container">
-        <SectionHead kicker={WAREHOUSE.kicker} heading={WAREHOUSE.heading} intro={WAREHOUSE.intro} />
+        <SectionHead kicker={WAREHOUSE.kicker} heading={WAREHOUSE.heading} introBn={WAREHOUSE.introBn} intro={WAREHOUSE.intro} />
         <div className="warehouse__methods">
           {WAREHOUSE.methods.map((m) => (
             <article key={m.tag} className="wh-card">
               <span className="wh-card__tag">{m.tag}</span>
               <h3 className="wh-card__title">{m.title}</h3>
-              <p className="wh-card__desc">{m.desc}</p>
+              <p className="wh-card__desc bn">{m.descBn}<span className="en-sub">{m.desc}</span></p>
               <ul className="wh-card__list">
                 {m.points.map((p) => (
-                  <li key={p}><Check size={16} aria-hidden="true" />{p}</li>
+                  <li key={p.en}><Check size={16} aria-hidden="true" /><span className="bn">{p.bn}<span className="en-sub">{p.en}</span></span></li>
                 ))}
               </ul>
             </article>
@@ -1016,7 +1047,7 @@ function Warehouse() {
         <div className="warehouse__access">
           <h4 className="warehouse__access-title"><ShieldCheck size={18} aria-hidden="true" /> Control who sees what</h4>
           <ul>
-            {WAREHOUSE.access.map((a) => <li key={a}><Check size={15} aria-hidden="true" />{a}</li>)}
+            {WAREHOUSE.access.map((a) => <li key={a.en}><Check size={15} aria-hidden="true" /><span className="bn">{a.bn}<span className="en-sub">{a.en}</span></span></li>)}
           </ul>
         </div>
       </div>
@@ -1033,6 +1064,7 @@ function HowItWorks() {
         <SectionHead
           kicker="Your path forward"
           heading="From chaos to control — in 90 days."
+          introBn="Big-bang জুয়া নয় — ধাপে ধাপে, wave-by-wave rollout। প্রতিটা step-এ আপনি sign-off করেন। কোনো surprise নেই।"
           intro="A structured, wave-by-wave rollout — not a big-bang gamble. You sign off at every step. No surprises."
         />
         <div ref={ref} className={`how__track ${shown ? 'in' : ''}`}>
@@ -1041,7 +1073,7 @@ function HowItWorks() {
               <div className="how__marker"><span>{i + 1}</span></div>
               <span className="how__week">{s.week}</span>
               <h3 className="how__title">{s.title}</h3>
-              <p className="how__desc">{s.desc}</p>
+              <p className="how__desc bn">{s.descBn}<span className="en-sub">{s.desc}</span></p>
             </div>
           ))}
         </div>
@@ -1067,23 +1099,24 @@ function RoiCalculator() {
         <SectionHead
           kicker="The real math"
           heading="See what manual work is costing you."
+          introBn="Slider গুলো নাড়ুন। এটা আপনারই টাকা — NexaERP চললে প্রতি মাসে ফেরত পাওয়া সম্ভব।"
           intro="Move the sliders. This is your money — recoverable every month NexaERP runs."
           center
         />
         <div className="roi__panel">
           <div className="roi__controls">
-            <RoiSlider label="People doing manual / repetitive work" value={team} min={1} max={200} step={1} onChange={setTeam} suffix=" people" />
-            <RoiSlider label="Hours each loses to manual work / week" value={hours} min={1} max={40} step={1} onChange={setHours} suffix=" hrs" />
-            <RoiSlider label="Loaded cost per hour" value={rate} min={150} max={2000} step={50} onChange={setRate} prefix="৳" />
+            <RoiSlider labelBn="Manual / repetitive কাজে যত মানুষ" label="People doing manual / repetitive work" value={team} min={1} max={200} step={1} onChange={setTeam} suffix=" people" />
+            <RoiSlider labelBn="প্রতিজন সপ্তাহে যত ঘণ্টা manual কাজে হারায়" label="Hours each loses to manual work / week" value={hours} min={1} max={40} step={1} onChange={setHours} suffix=" hrs" />
+            <RoiSlider labelBn="প্রতি ঘণ্টার loaded cost" label="Loaded cost per hour" value={rate} min={150} max={2000} step={50} onChange={setRate} prefix="৳" />
           </div>
 
           <div className="roi__result">
-            <p className="roi__result-label">You could recover about</p>
+            <p className="roi__result-label bn">আপনি প্রায় ফেরত পেতে পারেন<span className="en-sub">You could recover about</span></p>
             <p className="roi__monthly">{fmtBDT(monthly)}<span>/month</span></p>
-            <p className="roi__yearly">≈ {fmtBDT(yearly)} a year</p>
-            <p className="roi__assume">{ROI.assumptionNote}</p>
+            <p className="roi__yearly bn">≈ {fmtBDT(yearly)} বছরে<span className="en-sub">≈ {fmtBDT(yearly)} a year</span></p>
+            <p className="roi__assume bn">{ROI.assumptionNoteBn}<span className="en-sub">{ROI.assumptionNote}</span></p>
             <a href={BRAND.demoUrl} className="btn btn--primary btn--lg roi__cta">Claim this <ArrowRight size={18} /></a>
-            <p className="roi__risk">See your real number on your own data in a 30-min demo.</p>
+            <p className="roi__risk bn">30 মিনিটের demo-তে আপনার নিজের data দিয়ে আসল number দেখুন।<span className="en-sub">See your real number on your own data in a 30-min demo.</span></p>
           </div>
         </div>
       </div>
@@ -1091,12 +1124,12 @@ function RoiCalculator() {
   )
 }
 
-function RoiSlider({ label, value, min, max, step, onChange, prefix = '', suffix = '' }) {
+function RoiSlider({ labelBn, label, value, min, max, step, onChange, prefix = '', suffix = '' }) {
   const pct = ((value - min) / (max - min)) * 100
   return (
     <label className="slider">
       <span className="slider__top">
-        <span className="slider__label">{label}</span>
+        <span className="slider__label bn">{labelBn}<span className="en-sub">{label}</span></span>
         <span className="slider__value">{prefix}{value.toLocaleString('en-IN')}{suffix}</span>
       </span>
       <input
@@ -1225,6 +1258,7 @@ function Pricing() {
         <SectionHead
           kicker="Investment options"
           heading="Three plans, sized to your stage."
+          introBn="প্রতিটা plan-এ Bangla support, training, update আর security আছে — কোনো লুকানো charge নেই, কখনোই।"
           intro="Every plan includes Bangla support, training, updates and security — no surprise charges, ever."
           center
         />
@@ -1246,7 +1280,7 @@ function Pricing() {
             <article key={t.name} className={`tier ${t.featured ? 'tier--featured' : ''}`}>
               {t.badge && <span className="tier__badge">{t.badge}</span>}
               <h3 className="tier__name">{t.name}</h3>
-              <p className="tier__blurb">{t.blurb}</p>
+              <p className="tier__blurb bn">{t.blurbBn}<span className="en-sub">{t.blurb}</span></p>
               <p className="tier__price">{fmtBDT(priceFor(t.monthly))}<span className="tier__per">{per}</span></p>
               <p className="tier__setup">+ {fmtBDT(t.setup)} one-time setup</p>
               <p className="tier__users">{t.users}</p>
@@ -1291,7 +1325,7 @@ function Faq() {
                   <ChevronDown className="faq__chev" size={20} aria-hidden="true" />
                 </button>
                 <div className="faq__a-wrap" style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}>
-                  <div className="faq__a-inner"><p className="faq__a">{item.a}</p></div>
+                  <div className="faq__a-inner"><p className="faq__a bn">{item.aBn}<span className="en-sub">{item.a}</span></p></div>
                 </div>
               </div>
             )
@@ -1448,9 +1482,10 @@ function BookingWidget() {
               <User size={15} aria-hidden="true" />
               <input type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
             </label>
-            <label className="field">
-              <Phone size={15} aria-hidden="true" />
-              <input type="tel" placeholder="Mobile number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <label className="field field--wa">
+              <span className="field__legend">WhatsApp</span>
+              <MessageCircle size={15} aria-hidden="true" />
+              <input type="tel" placeholder="WhatsApp number" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </label>
             <label className="field">
               <Mail size={15} aria-hidden="true" />
@@ -1565,6 +1600,8 @@ const CSS = `
 }
 /* Bangla text — clean Bengali rendering for native-language emotional copy */
 .bn{font-family:var(--font-bn); line-height:1.55}
+/* small English support line that sits under a Bangla primary line */
+.en-sub{display:block; font-family:var(--font-body); font-size:.8em; color:var(--muted-2); line-height:1.5; margin-top:5px; font-weight:400}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0}
@@ -2000,6 +2037,9 @@ ul{margin:0;padding:0;list-style:none}
 .booking__fields{display:grid; grid-template-columns:1fr 1fr; gap:12px}
 .booking__fields .field:last-child{grid-column:1 / -1}
 .field{display:flex; align-items:center; gap:9px; background:var(--bg-3); border:1px solid var(--line-2); border-radius:11px; padding:0 14px; transition:border-color .2s, box-shadow .2s}
+.field--wa{position:relative; border-color:rgba(40,184,63,.4)}
+.field--wa .field svg,.field--wa > svg{color:var(--green)}
+.field__legend{position:absolute; top:-8px; left:13px; padding:0 7px; background:var(--bg-3); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--green); pointer-events:none}
 .field svg{color:var(--muted-2); flex:none}
 .field:focus-within{border-color:var(--green); box-shadow:0 0 0 3px rgba(40,184,63,.14)}
 .field:focus-within svg{color:var(--green)}
@@ -2077,6 +2117,34 @@ ul{margin:0;padding:0;list-style:none}
   .hero__ctas .btn{flex:1}
   .footer__bottom{flex-direction:column; gap:8px}
   .footer__cols{grid-template-columns:1fr 1fr}
+}
+
+/* ---- custom trembling chat button (drives Crisp) ---- */
+.chat-fab{
+  position:fixed; right:22px; bottom:22px; z-index:999990;
+  width:58px; height:58px; border-radius:50%; border:none; cursor:pointer;
+  background:var(--green); color:#04210b; display:grid; place-items:center;
+  box-shadow:0 10px 30px rgba(40,184,63,.45), 0 4px 12px rgba(0,0,0,.4);
+  animation:fabShake 3.2s ease-in-out infinite;
+  transition:transform .2s, background .2s;
+}
+.chat-fab:hover{background:var(--green-hi); transform:scale(1.07); animation-play-state:paused}
+.chat-fab__ring{
+  position:absolute; inset:0; border-radius:50%; border:2px solid var(--green);
+  animation:fabPulse 2.4s ease-out infinite; pointer-events:none;
+}
+@keyframes fabPulse{0%{transform:scale(1); opacity:.55}80%,100%{transform:scale(1.7); opacity:0}}
+@keyframes fabShake{
+  0%,11%,100%{transform:rotate(0)}
+  1.5%{transform:rotate(-13deg)}
+  3%{transform:rotate(11deg)}
+  4.5%{transform:rotate(-9deg)}
+  6%{transform:rotate(7deg)}
+  7.5%{transform:rotate(-4deg)}
+  9%{transform:rotate(2deg)}
+}
+@media (max-width:520px){
+  .chat-fab{right:16px; bottom:16px; width:54px; height:54px}
 }
 
 @media (prefers-reduced-motion:reduce){
