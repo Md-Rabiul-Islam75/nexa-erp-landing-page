@@ -44,33 +44,32 @@ import {
 
 /* ===========================================================================
  * 1. BRAND
+ *    Editable values come from .env (VITE_* keys) with safe fallbacks here,
+ *    so non-developers can change contact details without touching code.
  * ======================================================================== */
+const ENV = import.meta.env
 const BRAND = {
-  name: 'NexaERP',
-  company: 'Automation Services Ltd.',
-  parent: 'Nexalinx',
+  name: ENV.VITE_APP_NAME || 'NexaERP',
+  company: ENV.VITE_COMPANY_NAME || 'Automation Services Ltd.',
+  parent: ENV.VITE_PARENT_BRAND || 'Nexalinx',
   tagline: 'Technology for Power.',
-  // REPLACE BEFORE LAUNCH — contact details
-  phone: '+880 XXXX-XXXXXX',
-  email: 'info@nexalinx.com',
-  website: 'nexalinx.com',
+  phone: ENV.VITE_CONTACT_PHONE || '+880 1306 660656',
+  email: ENV.VITE_CONTACT_EMAIL || 'info@nexalinx.com',
+  website: ENV.VITE_WEBSITE || 'nexalinx.com',
   locations: ['Dhaka, Bangladesh', 'Long Island City, NY'],
-  // REPLACE BEFORE LAUNCH — wire to real demo form / Outreaq (NexaCRM) pipeline
-  demoUrl: '#book-demo',
-  // REPLACE BEFORE LAUNCH — WhatsApp number in international format, digits only (no +, spaces or dashes)
-  whatsapp: '8801XXXXXXXXX',
+  demoUrl: ENV.VITE_DEMO_URL || '#book-demo',
+  // WhatsApp number in international format, digits only (no +, spaces or dashes)
+  whatsapp: ENV.VITE_WHATSAPP || '8801306660656',
   whatsappMsg: 'Hi, I’d like to book a NexaERP demo.',
-  // REPLACE BEFORE LAUNCH — Google Calendar appointment-schedule link (or Calendly). Leave blank to hide the button.
-  calendarUrl: '',
+  // Google Calendar / Calendly link. Blank = hide the "Pick a time" button.
+  calendarUrl: ENV.VITE_CALENDAR_URL || '',
 }
 
 // wa.me deep link with a pre-filled message
 const waLink = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(BRAND.whatsappMsg)}`
 
-// REPLACE BEFORE LAUNCH — Crisp live-chat Website ID.
-// Get it at app.crisp.chat → Settings → Website Settings → Setup (the UUID in the snippet).
-// Leave blank to disable the chat bubble. The widget renders bottom-right automatically.
-const CRISP_WEBSITE_ID = 'eb42463f-8c69-4fd9-822e-a271d4cf9e51'
+// Crisp live-chat Website ID (from .env). Blank = disable the chat bubble.
+const CRISP_WEBSITE_ID = ENV.VITE_CRISP_WEBSITE_ID || ''
 
 /* ===========================================================================
  * 2. NAV
@@ -443,8 +442,8 @@ const FINAL = {
  *      WhatsApp message. All settings editable here.
  * ======================================================================== */
 const BOOKING = {
-  // 01755396613 in international format for wa.me (BD code 880, drop leading 0)
-  whatsapp: '8801755396613',
+  // Demo-booking WhatsApp number (from .env), international format for wa.me
+  whatsapp: ENV.VITE_BOOKING_WHATSAPP || '8801755396613',
   titleBn: 'আপনার সুবিধামতো একটা সময় বেছে নিন',
   title: 'Pick a time that suits you',
   subBn: 'তারিখ আর slot বেছে আপনার তথ্য দিন — WhatsApp-এ সঙ্গে সঙ্গে confirm হবে।',
@@ -895,7 +894,7 @@ function Problem() {
   return (
     <section id="problem" className="section problem">
       <div className="container">
-        <SectionHead kicker={PROBLEM.kicker} kickerDanger heading={PROBLEM.heading} introBn={PROBLEM.introBn} intro={PROBLEM.intro} />
+        <SectionHead kicker={PROBLEM.kicker} kickerDanger heading={PROBLEM.heading} introBn={PROBLEM.introBn} intro={PROBLEM.intro} center />
         <div ref={ref} className={`problem__grid ${shown ? 'in' : ''}`}>
           {PROBLEM.cards.map((c, i) => (
             <article key={c.title} className="loss-card" style={{ transitionDelay: `${i * 70}ms` }}>
@@ -941,6 +940,7 @@ function Modules() {
           kicker="One platform, sixteen modules"
           heading="Everything your business does — in one system."
           intro="One login replaces fifteen apps. Each module shares a single database, so there’s nothing to reconcile and nothing to mismatch."
+          center
         />
         <div ref={ref} className={`modules ${shown ? 'in' : ''}`}>
           {MODULES.map((m, i) => (
@@ -1029,7 +1029,7 @@ function Warehouse() {
   return (
     <section className="section warehouse">
       <div className="container">
-        <SectionHead kicker={WAREHOUSE.kicker} heading={WAREHOUSE.heading} introBn={WAREHOUSE.introBn} intro={WAREHOUSE.intro} />
+        <SectionHead kicker={WAREHOUSE.kicker} heading={WAREHOUSE.heading} introBn={WAREHOUSE.introBn} intro={WAREHOUSE.intro} center />
         <div className="warehouse__methods">
           {WAREHOUSE.methods.map((m) => (
             <article key={m.tag} className="wh-card">
@@ -1066,6 +1066,7 @@ function HowItWorks() {
           heading="From chaos to control — in 90 days."
           introBn="Big-bang জুয়া নয় — ধাপে ধাপে, wave-by-wave rollout। প্রতিটা step-এ আপনি sign-off করেন। কোনো surprise নেই।"
           intro="A structured, wave-by-wave rollout — not a big-bang gamble. You sign off at every step. No surprises."
+          center
         />
         <div ref={ref} className={`how__track ${shown ? 'in' : ''}`}>
           {STEPS.map((s, i) => (
