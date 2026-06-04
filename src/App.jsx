@@ -38,7 +38,7 @@ import {
   Building2, ClipboardList, HeartHandshake, ReceiptText, BarChart3, FileCheck2,
   ShieldCheck, Smartphone, Menu, X, Check, ChevronDown, ArrowRight, Zap,
   TrendingDown, Phone, Mail, MapPin, Quote, ScanLine, RefreshCw, Play,
-  MessageCircle, CalendarClock,
+  MessageCircle, CalendarClock, Calendar, Clock, User, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 
 /* ===========================================================================
@@ -382,6 +382,26 @@ const FINAL = {
   riskReversalBn: 'Free ৩০ মিনিটের demo · pilot-এ commit করতে হবে না · comfortable হলে তবেই full deal।',
   riskReversal: 'Free 30-min demo · No commitment to pilot · Full deal only when you’re comfortable.',
 }
+
+/* ===========================================================================
+ * 15b. BOOKING WIDGET — Calendly-style demo scheduler that sends a pre-filled
+ *      WhatsApp message. All settings editable here.
+ * ======================================================================== */
+const BOOKING = {
+  // 01755396613 in international format for wa.me (BD code 880, drop leading 0)
+  whatsapp: '8801755396613',
+  titleBn: 'আপনার সুবিধামতো একটা সময় বেছে নিন',
+  title: 'Pick a time that suits you',
+  subBn: 'তারিখ আর slot বেছে আপনার তথ্য দিন — WhatsApp-এ সঙ্গে সঙ্গে confirm হবে।',
+  sub: 'Choose a date and slot, add your details — it confirms instantly on WhatsApp.',
+  daysAhead: 45,            // how far ahead visitors can book
+  disabledWeekdays: [5],    // 5 = Friday (weekend in BD). Empty array = all days open.
+  slots: ['10:00 am', '11:00 am', '12:00 pm', '02:00 pm', '03:00 pm', '04:00 pm', '05:00 pm'],
+}
+
+// Month / weekday labels (locale-independent)
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 /* ===========================================================================
  *  HOOKS & SMALL HELPERS
@@ -1046,37 +1066,180 @@ function FinalCta() {
   return (
     <section id="book-demo" className="final">
       <div className="final__glow" aria-hidden="true" />
-      <div className="container final__inner">
-        <span className="final__scarcity bn">{FINAL.scarcityBn}</span>
-        <h2 className="final__heading bn">{FINAL.headingBn}</h2>
-        <p className="final__heading-en">{FINAL.heading}</p>
-        <p className="final__sub bn">{FINAL.subBn}</p>
-        <p className="final__sub-en">{FINAL.sub}</p>
-        <p className="final__risk bn">{FINAL.riskReversalBn}</p>
-        <p className="final__risk-en">{FINAL.riskReversal}</p>
 
-        {/* Pick-a-time + WhatsApp — the fast, low-friction ways to start a conversation */}
-        <div className="final__methods">
-          {BRAND.calendarUrl && (
-            <a className="final__method final__method--cal" href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
-              <CalendarClock size={18} aria-hidden="true" /> Pick a time
-            </a>
-          )}
-          <a className="final__method final__method--wa" href={waLink} target="_blank" rel="noopener noreferrer">
-            <MessageCircle size={18} aria-hidden="true" /> WhatsApp us
-          </a>
-          <a className="final__method" href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>
-            <Phone size={16} aria-hidden="true" /> {BRAND.phone}
-          </a>
-          <a className="final__method" href={`mailto:${BRAND.email}`}>
-            <Mail size={16} aria-hidden="true" /> {BRAND.email}
-          </a>
+      <div className="container">
+        <SectionHead
+          kicker="Free 30-minute walkthrough"
+          heading="Book your demo"
+          introBn={BOOKING.titleBn}
+          intro={BOOKING.sub}
+          center
+        />
+      </div>
+
+      <div className="container final__split">
+        <div className="final__copy">
+          <span className="final__scarcity bn">{FINAL.scarcityBn}</span>
+          <h2 className="final__heading bn">{FINAL.headingBn}</h2>
+          <p className="final__heading-en">{FINAL.heading}</p>
+          <p className="final__sub bn">{FINAL.subBn}</p>
+          <p className="final__sub-en">{FINAL.sub}</p>
+          <p className="final__risk bn">{FINAL.riskReversalBn}</p>
+          <p className="final__risk-en">{FINAL.riskReversal}</p>
+
+          <div className="final__methods-wrap">
+            <p className="final__or">Prefer to talk first?</p>
+            <div className="final__methods">
+              <a className="final__method" href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>
+                <Phone size={16} aria-hidden="true" /> {BRAND.phone}
+              </a>
+              <a className="final__method" href={`mailto:${BRAND.email}`}>
+                <Mail size={16} aria-hidden="true" /> {BRAND.email}
+              </a>
+            </div>
+          </div>
         </div>
-        {!BRAND.calendarUrl && (
-          <p className="final__cal-hint">Tip: add a Google Calendar appointment link to <code>BRAND.calendarUrl</code> to let visitors pick a slot instantly.</p>
-        )}
+
+        <BookingWidget />
       </div>
     </section>
+  )
+}
+
+/* ----------------------------------------------------- BOOKING WIDGET --- */
+function BookingWidget() {
+  // "today" at midnight — the floor for selectable dates
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + BOOKING.daysAhead)
+
+  const [view, setView] = useState({ y: today.getFullYear(), m: today.getMonth() })
+  const [date, setDate] = useState(null)
+  const [time, setTime] = useState('')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+
+  const sameDay = (a, b) => a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+  const dayDisabled = (d) => d < today || d > maxDate || BOOKING.disabledWeekdays.includes(d.getDay())
+
+  // build the visible month grid (leading blanks + day cells)
+  const firstDay = new Date(view.y, view.m, 1).getDay()
+  const daysInMonth = new Date(view.y, view.m + 1, 0).getDate()
+  const cells = []
+  for (let i = 0; i < firstDay; i++) cells.push(null)
+  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(view.y, view.m, d))
+
+  const canPrev = view.y > today.getFullYear() || (view.y === today.getFullYear() && view.m > today.getMonth())
+  const canNext = view.y < maxDate.getFullYear() || (view.y === maxDate.getFullYear() && view.m < maxDate.getMonth())
+  const shift = (n) => setView((v) => { const d = new Date(v.y, v.m + n, 1); return { y: d.getFullYear(), m: d.getMonth() } })
+
+  const pad = (n) => String(n).padStart(2, '0')
+  const ddmmyyyy = date ? `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}` : ''
+  const niceDate = date ? `${WEEKDAYS[date.getDay()]}, ${date.getDate()} ${MONTHS[date.getMonth()].slice(0, 3)} ${date.getFullYear()}` : ''
+
+  const valid = Boolean(date && time && name.trim() && phone.trim())
+
+  // WhatsApp text formatting: *bold* renders on every device — no emojis (they break to "?")
+  const message =
+`Hi NexaERP, I want to take a demo.
+*Date:* ${ddmmyyyy}
+*Time:* ${time}
+*Name:* ${name.trim()}
+*Number:* ${phone.trim()}
+*Email:* ${email.trim() || '-'}`
+
+  const waHref = `https://wa.me/${BOOKING.whatsapp}?text=${encodeURIComponent(message)}`
+
+  return (
+      <div className="booking">
+        <div className="booking__glow" aria-hidden="true" />
+
+        <div className="booking__grid">
+          {/* STEP 1 — date */}
+          <div className="booking__col">
+            <span className="booking__step"><span className="booking__step-n">1</span> Pick a date</span>
+            <div className="cal">
+              <div className="cal__bar">
+                <button type="button" className="cal__nav" onClick={() => shift(-1)} disabled={!canPrev} aria-label="Previous month"><ChevronLeft size={18} /></button>
+                <span className="cal__title">{MONTHS[view.m]} {view.y}</span>
+                <button type="button" className="cal__nav" onClick={() => shift(1)} disabled={!canNext} aria-label="Next month"><ChevronRight size={18} /></button>
+              </div>
+              <div className="cal__week">{WEEKDAYS.map((w) => <span key={w}>{w}</span>)}</div>
+              <div className="cal__grid">
+                {cells.map((c, i) => c ? (
+                  <button
+                    type="button"
+                    key={i}
+                    className={`cal__day ${sameDay(c, date) ? 'is-selected' : ''}`}
+                    disabled={dayDisabled(c)}
+                    onClick={() => setDate(c)}
+                  >{c.getDate()}</button>
+                ) : <span key={i} className="cal__day cal__day--empty" />)}
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 2 — time */}
+          <div className="booking__col">
+            <span className="booking__step"><span className="booking__step-n">2</span> Pick a time slot</span>
+            <div className={`slots ${date ? '' : 'slots--locked'}`}>
+              {BOOKING.slots.map((s) => (
+                <button
+                  type="button"
+                  key={s}
+                  className={`slot ${time === s ? 'is-selected' : ''}`}
+                  onClick={() => setTime(s)}
+                  disabled={!date}
+                >
+                  <Clock size={14} aria-hidden="true" />{s}
+                </button>
+              ))}
+              {!date && <p className="slots__hint">Pick a date first to see slots.</p>}
+            </div>
+          </div>
+        </div>
+
+        {/* STEP 3 — details */}
+        <div className="booking__form">
+          <span className="booking__step"><span className="booking__step-n">3</span> Your details</span>
+          <div className="booking__fields">
+            <label className="field">
+              <User size={15} aria-hidden="true" />
+              <input type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
+            </label>
+            <label className="field">
+              <Phone size={15} aria-hidden="true" />
+              <input type="tel" placeholder="Mobile number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            </label>
+            <label className="field">
+              <Mail size={15} aria-hidden="true" />
+              <input type="email" placeholder="Email (optional)" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </label>
+          </div>
+        </div>
+
+        {/* summary + submit */}
+        <div className="booking__foot">
+          <div className="booking__summary">
+            {valid ? (
+              <><Check size={16} aria-hidden="true" /> {niceDate} · {time}</>
+            ) : (
+              <span className="booking__summary-empty">Select a date, time and your name to continue.</span>
+            )}
+          </div>
+          <a
+            className={`btn btn--primary btn--lg booking__submit ${valid ? '' : 'is-disabled'}`}
+            href={valid ? waHref : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-disabled={!valid}
+            onClick={(e) => { if (!valid) e.preventDefault() }}
+          >
+            <MessageCircle size={18} aria-hidden="true" /> Confirm on WhatsApp
+          </a>
+        </div>
+        <p className="booking__note">No payment now · We’ll confirm your slot on WhatsApp within minutes.</p>
+      </div>
   )
 }
 
@@ -1508,9 +1671,12 @@ ul{margin:0;padding:0;list-style:none}
 .final{position:relative; padding:110px 0; text-align:center; border-top:1px solid var(--line); overflow:hidden; background:var(--bg-2)}
 .final__glow{position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(40,184,63,.22),transparent 70%); pointer-events:none}
 .final__inner{position:relative; max-width:720px}
+/* split layout — persuasion copy (left) next to the booking widget (right) */
+.final__split{position:relative; display:grid; grid-template-columns:0.82fr 1.08fr; gap:46px; align-items:start; text-align:left}
+.final__copy{max-width:480px}
 .final__scarcity{display:inline-block; font-size:13.5px; font-weight:600; color:var(--green); border:1px solid rgba(40,184,63,.4); background:rgba(40,184,63,.08); padding:8px 18px; border-radius:999px; margin-bottom:24px}
 .final__heading{font-family:var(--font-display); font-weight:700; letter-spacing:-1px; font-size:clamp(32px,5vw,52px); line-height:1.05; margin:0 0 18px}
-.final__heading.bn{line-height:1.3; margin:0 0 8px}
+.final__heading.bn{font-size:clamp(20px,2.5vw,30px); line-height:1.34; margin:0 0 8px}
 .final__heading-en{font-family:var(--font-display); font-weight:600; letter-spacing:-.5px; font-size:clamp(17px,2.4vw,24px); color:var(--muted); margin:0 0 22px}
 .final__sub{font-size:19px; color:var(--muted); margin:0 0 32px}
 .final__sub.bn{color:var(--ink); font-weight:500; line-height:1.7; margin:0 0 6px}
@@ -1518,15 +1684,72 @@ ul{margin:0;padding:0;list-style:none}
 .final__risk{font-size:14px; color:var(--muted-2); margin:18px 0 0}
 .final__risk.bn{color:var(--muted); font-weight:500; margin:20px 0 0}
 .final__risk-en{font-size:12.5px; color:var(--muted-2); margin:5px 0 0}
-.final__methods{display:flex; gap:12px; justify-content:center; margin-top:34px; flex-wrap:wrap}
+.final__methods-wrap{position:relative; text-align:left; margin-top:30px; padding-top:24px; border-top:1px solid var(--line)}
+.final__or{font-size:13px; color:var(--muted-2); margin:0 0 14px; letter-spacing:.02em}
+.final__methods{display:flex; gap:12px; justify-content:flex-start; flex-wrap:wrap}
 .final__method{display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-weight:600; font-size:15px; padding:11px 18px; border:1px solid var(--line-2); border-radius:11px; transition:color .2s, border-color .2s, background .2s, transform .15s}
 .final__method:hover{color:var(--ink); border-color:var(--green); transform:translateY(-2px)}
-.final__method--wa{color:var(--green); border-color:rgba(40,184,63,.4); background:rgba(40,184,63,.08)}
-.final__method--wa:hover{color:#04210b; background:var(--green); border-color:var(--green)}
-.final__method--cal{color:var(--ink); border-color:var(--green); background:rgba(40,184,63,.1)}
-.final__method--cal:hover{color:#04210b; background:var(--green)}
-.final__cal-hint{font-size:12px; color:var(--muted-2); margin:18px 0 0}
-.final__cal-hint code{background:var(--bg-3); padding:2px 6px; border-radius:5px; font-size:11.5px; color:var(--green)}
+
+/* ---- booking widget ---- */
+.booking{position:relative; width:100%; margin:0; text-align:left; background:linear-gradient(180deg,var(--bg-2),var(--bg)); border:1px solid var(--line-2); border-radius:20px; padding:32px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.booking__glow{position:absolute; top:-30%; left:50%; transform:translateX(-50%); width:70%; height:60%; background:radial-gradient(ellipse,rgba(40,184,63,.16),transparent 65%); pointer-events:none}
+.booking__head{position:relative; text-align:center; margin-bottom:26px}
+.booking__badge{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--green); border:1px solid rgba(40,184,63,.4); background:rgba(40,184,63,.08); padding:6px 14px; border-radius:999px; margin-bottom:14px}
+.booking__title{margin:0; font-weight:700; font-size:clamp(20px,2.6vw,26px); line-height:1.35; color:var(--ink)}
+.booking__title-en{margin:4px 0 0; font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--muted-2)}
+.booking__sub{margin:10px 0 0; font-size:14.5px; color:var(--muted)}
+.booking__grid{position:relative; display:grid; grid-template-columns:1fr .85fr; gap:24px; margin-bottom:24px}
+.booking__col{min-width:0}
+.booking__step{display:flex; align-items:center; gap:9px; font-weight:600; font-size:14px; color:var(--ink); margin-bottom:14px}
+.booking__step-n{display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:rgba(40,184,63,.14); color:var(--green); font-size:12px; font-weight:700; flex:none}
+
+/* calendar */
+.cal{background:var(--bg-3); border:1px solid var(--line); border-radius:14px; padding:14px}
+.cal__bar{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+.cal__title{font-family:var(--font-display); font-weight:600; font-size:15.5px}
+.cal__nav{display:grid; place-items:center; width:32px; height:32px; border-radius:9px; background:var(--bg-2); border:1px solid var(--line); color:var(--ink); cursor:pointer; transition:border-color .2s, color .2s, background .2s}
+.cal__nav:hover:not(:disabled){border-color:var(--green); color:var(--green)}
+.cal__nav:disabled{opacity:.3; cursor:not-allowed}
+.cal__week{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px}
+.cal__week span{text-align:center; font-size:11px; font-weight:600; color:var(--muted-2); padding:4px 0}
+.cal__grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px}
+.cal__day{aspect-ratio:1; display:grid; place-items:center; border:none; background:transparent; color:var(--ink); font-family:var(--font-body); font-size:13.5px; font-weight:500; border-radius:9px; cursor:pointer; transition:background .15s, color .15s, transform .1s}
+.cal__day:hover:not(:disabled):not(.is-selected){background:rgba(255,255,255,.07)}
+.cal__day:disabled{color:var(--muted-2); opacity:.32; cursor:not-allowed}
+.cal__day--empty{cursor:default}
+.cal__day.is-selected{background:var(--green); color:#04210b; font-weight:700; box-shadow:0 4px 14px rgba(40,184,63,.4)}
+
+/* time slots */
+.slots{display:grid; grid-template-columns:1fr 1fr; gap:9px; align-content:start; position:relative}
+.slots--locked{opacity:.6}
+.slot{display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:12px 10px; border:1px solid var(--line-2); border-radius:11px; background:var(--bg-3); color:var(--ink); font-family:var(--font-body); font-weight:600; font-size:14px; cursor:pointer; transition:border-color .15s, background .15s, color .15s, transform .1s}
+.slot svg{color:var(--green); transition:color .15s}
+.slot:hover:not(:disabled):not(.is-selected){border-color:var(--green); transform:translateY(-1px)}
+.slot:disabled{cursor:not-allowed}
+.slot.is-selected{background:var(--green); border-color:var(--green); color:#04210b}
+.slot.is-selected svg{color:#04210b}
+.slots__hint{grid-column:1 / -1; font-size:12.5px; color:var(--muted-2); margin:4px 0 0; text-align:center}
+
+/* details form */
+.booking__form{position:relative; margin-bottom:24px}
+.booking__fields{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.booking__fields .field:last-child{grid-column:1 / -1}
+.field{display:flex; align-items:center; gap:9px; background:var(--bg-3); border:1px solid var(--line-2); border-radius:11px; padding:0 14px; transition:border-color .2s, box-shadow .2s}
+.field svg{color:var(--muted-2); flex:none}
+.field:focus-within{border-color:var(--green); box-shadow:0 0 0 3px rgba(40,184,63,.14)}
+.field:focus-within svg{color:var(--green)}
+.field input{flex:1; min-width:0; background:none; border:none; outline:none; color:var(--ink); font-family:var(--font-body); font-size:14.5px; padding:13px 0}
+.field input::placeholder{color:var(--muted-2)}
+
+/* summary + submit */
+.booking__foot{position:relative; display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; padding-top:22px; border-top:1px solid var(--line)}
+.booking__summary{display:inline-flex; align-items:center; gap:9px; font-weight:600; font-size:15px; color:var(--green)}
+.booking__summary svg{flex:none}
+.booking__summary-empty{color:var(--muted-2); font-weight:500; font-size:14px}
+.booking__submit{white-space:nowrap}
+.booking__submit.is-disabled{opacity:.4; cursor:not-allowed; box-shadow:none; pointer-events:auto; transform:none}
+.booking__submit.is-disabled:hover{background:var(--green); transform:none}
+.booking__note{position:relative; text-align:center; font-size:12.5px; color:var(--muted-2); margin:16px 0 0}
 
 /* ---- footer ---- */
 .footer{border-top:1px solid var(--line); padding:64px 0 32px; background:var(--bg)}
@@ -1549,6 +1772,10 @@ ul{margin:0;padding:0;list-style:none}
   .how__track{grid-template-columns:repeat(3,1fr); gap:28px}
   .how__track::before{display:none}
   .stories__grid{grid-template-columns:1fr 1fr}
+  .final__split{grid-template-columns:1fr; gap:34px; text-align:center}
+  .final__copy{max-width:680px; margin:0 auto}
+  .final__methods-wrap{text-align:center}
+  .final__methods{justify-content:center}
 }
 @media (max-width:860px){
   .nav__links,.nav__signin{display:none}
@@ -1566,6 +1793,11 @@ ul{margin:0;padding:0;list-style:none}
   .roi__result{border-left:none; border-top:1px solid var(--line)}
   .testimonials{grid-template-columns:1fr}
   .stories__grid{grid-template-columns:1fr}
+  .booking__grid{grid-template-columns:1fr; gap:28px}
+  .booking__fields{grid-template-columns:1fr}
+  .booking__foot{flex-direction:column; align-items:stretch; text-align:center}
+  .booking__summary{justify-content:center}
+  .booking__submit{width:100%}
   .pricing__grid{grid-template-columns:1fr}
   .tier--featured{transform:none; order:-1}
   .footer__inner{grid-template-columns:1fr}
@@ -1575,6 +1807,8 @@ ul{margin:0;padding:0;list-style:none}
   .container{padding:0 18px}
   .problem__grid,.modules,.how__track,.warehouse__access ul{grid-template-columns:1fr}
   .stats__grid{grid-template-columns:1fr 1fr}
+  .booking{padding:22px 18px}
+  .slots{grid-template-columns:1fr 1fr}
   .hero__ctas .btn{flex:1}
   .footer__bottom{flex-direction:column; gap:8px}
   .footer__cols{grid-template-columns:1fr 1fr}
