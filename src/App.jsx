@@ -452,7 +452,7 @@ const FINAL = {
  * ======================================================================== */
 const BOOKING = {
   // Demo-booking WhatsApp number (from .env), international format for wa.me
-  whatsapp: ENV.VITE_BOOKING_WHATSAPP || '8801755396613',
+  whatsapp: ENV.VITE_BOOKING_WHATSAPP || '8801847364088', // keep fallback in sync with .env
   titleBn: 'আপনার সুবিধামতো একটা সময় বেছে নিন',
   title: 'Pick a time that suits you',
   subBn: 'তারিখ আর slot বেছে আপনার তথ্য দিন — WhatsApp-এ সঙ্গে সঙ্গে confirm হবে।',
