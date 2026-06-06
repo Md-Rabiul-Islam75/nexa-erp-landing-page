@@ -1,3 +1,5 @@
 node_modules/
 dist/
-.env
+# NOTE: .env is intentionally committed — it only holds PUBLIC VITE_* values
+# (baked into the client bundle anyway). Never add real secrets to a VITE_ var;
+# put backend secrets in your host's env settings instead.
