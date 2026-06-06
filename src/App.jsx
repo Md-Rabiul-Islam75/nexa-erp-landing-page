@@ -63,7 +63,7 @@ const BRAND = {
   parent: ENV.VITE_PARENT_BRAND || 'Nexalinx',
   tagline: 'Technology for Power.',
   phone: ENV.VITE_CONTACT_PHONE || '+880 1306 660656',
-  email: ENV.VITE_CONTACT_EMAIL || 'info@nexalinx.com',
+  email: ENV.VITE_CONTACT_EMAIL || 'pappu@nexalinx.com',
   website: ENV.VITE_WEBSITE || 'nexalinx.com',
   locations: ['Dhaka, Bangladesh', 'Long Island City, NY'],
   demoUrl: ENV.VITE_DEMO_URL || '#book-demo',
@@ -79,6 +79,9 @@ const waLink = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(BRAND.
 
 // Crisp live-chat Website ID (from .env). Blank = disable the chat bubble.
 const CRISP_WEBSITE_ID = ENV.VITE_CRISP_WEBSITE_ID || ''
+
+// Web3Forms public access key — powers the real "Confirm on email" submission.
+const WEB3FORMS_KEY = ENV.VITE_WEB3FORMS_KEY || '1afa77c5-18bd-48b8-b3a8-4abd2233b0ce'
 
 /* ===========================================================================
  * 2. NAV
@@ -1438,6 +1441,7 @@ function BookingForm() {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
+  const [emailState, setEmailState] = useState('idle') // idle | sending | sent | error
 
   const sameDay = (a, b) => a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
   const dayDisabled = (d) => d < today || d > maxDate || BOOKING.disabledWeekdays.includes(d.getDay())
@@ -1457,7 +1461,10 @@ function BookingForm() {
   const ddmmyyyy = date ? `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}` : ''
   const niceDate = date ? `${WEEKDAYS[date.getDay()]}, ${date.getDate()} ${MONTHS[date.getMonth()].slice(0, 3)} ${date.getFullYear()}` : ''
 
-  const valid = Boolean(date && time && name.trim() && phone.trim())
+  // WhatsApp needs a phone number; Email needs a valid email — each channel its own.
+  const baseValid = Boolean(date && time && name.trim())
+  const validWa = baseValid && Boolean(phone.trim())
+  const validEmail = baseValid && /\S+@\S+\.\S+/.test(email.trim())
 
   // WhatsApp text formatting: *bold* renders on every device — no emojis (they break to "?")
   const message =
@@ -1469,6 +1476,43 @@ function BookingForm() {
 *Email:* ${email.trim() || '-'}`
 
   const waHref = `https://wa.me/${BOOKING.whatsapp}?text=${encodeURIComponent(message)}`
+
+  // Email body (plain text) for the Web3Forms submission
+  const emailBody =
+`Hi NexaERP, I want to take a demo.
+Date: ${ddmmyyyy}
+Time: ${time}
+Name: ${name.trim()}
+Number: ${phone.trim()}
+Email: ${email.trim()}`
+
+  // "Confirm on email" → real send via Web3Forms. The recipient inbox is set in
+  // the Web3Forms dashboard (currently pappu@nexalinx.com), not in code.
+  const submitEmail = async () => {
+    if (!validEmail || emailState === 'sending') return
+    setEmailState('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: 'NexaERP — Demo Request',
+          from_name: name.trim(),
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          date: ddmmyyyy,
+          time,
+          message: emailBody,
+        }),
+      })
+      const data = await res.json()
+      setEmailState(data.success ? 'sent' : 'error')
+    } catch {
+      setEmailState('error')
+    }
+  }
 
   return (
       <>
@@ -1540,24 +1584,40 @@ function BookingForm() {
         {/* summary + submit */}
         <div className="booking__foot">
           <div className="booking__summary">
-            {valid ? (
+            {baseValid ? (
               <><Check size={16} aria-hidden="true" /> {niceDate} · {time}</>
             ) : (
               <span className="booking__summary-empty">Select a date, time and your name to continue.</span>
             )}
           </div>
-          <a
-            className={`btn btn--primary btn--lg booking__submit ${valid ? '' : 'is-disabled'}`}
-            href={valid ? waHref : undefined}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-disabled={!valid}
-            onClick={(e) => { if (!valid) e.preventDefault() }}
-          >
-            <MessageCircle size={18} aria-hidden="true" /> Confirm on WhatsApp
-          </a>
+          <div className="booking__actions">
+            <a
+              className={`btn btn--primary btn--lg booking__submit ${validWa ? '' : 'is-disabled'}`}
+              href={validWa ? waHref : undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-disabled={!validWa}
+              onClick={(e) => { if (!validWa) e.preventDefault() }}
+            >
+              <MessageCircle size={18} aria-hidden="true" /> Confirm on WhatsApp
+            </a>
+            <button
+              type="button"
+              className={`btn btn--outline btn--lg booking__submit ${emailState === 'sent' ? 'is-sent' : ''} ${(validEmail && emailState !== 'sending' && emailState !== 'sent') ? '' : 'is-disabled'}`}
+              onClick={submitEmail}
+              disabled={!validEmail || emailState === 'sending' || emailState === 'sent'}
+            >
+              {emailState === 'sending' && <><RefreshCw size={17} className="spin" aria-hidden="true" /> Sending…</>}
+              {emailState === 'sent' && <><Check size={18} aria-hidden="true" /> Email sent</>}
+              {(emailState === 'idle' || emailState === 'error') && <><Mail size={18} aria-hidden="true" /> Confirm on email</>}
+            </button>
+          </div>
         </div>
-        <p className="booking__note">No payment now · We’ll confirm your slot on WhatsApp within minutes.</p>
+        {emailState === 'sent'
+          ? <p className="booking__note booking__note--ok">✓ Request sent — we’ll confirm your slot shortly. Thank you!</p>
+          : emailState === 'error'
+          ? <p className="booking__note booking__note--err">Couldn’t send the email just now — please use “Confirm on WhatsApp”, or try again.</p>
+          : <p className="booking__note">No payment now · We’ll confirm your slot on WhatsApp or email within minutes.</p>}
       </>
   )
 }
@@ -2130,10 +2190,17 @@ ul{margin:0;padding:0;list-style:none}
 .booking__summary{display:inline-flex; align-items:center; gap:9px; font-weight:600; font-size:15px; color:var(--green)}
 .booking__summary svg{flex:none}
 .booking__summary-empty{color:var(--muted-2); font-weight:500; font-size:14px}
+.booking__actions{display:flex; gap:10px; flex-wrap:wrap}
 .booking__submit{white-space:nowrap}
-.booking__submit.is-disabled{opacity:.4; cursor:not-allowed; box-shadow:none; pointer-events:auto; transform:none}
-.booking__submit.is-disabled:hover{background:var(--green); transform:none}
+.booking__submit.is-disabled{opacity:.4; cursor:not-allowed; box-shadow:none; transform:none}
+.booking__submit.is-disabled:hover{transform:none}
+.booking__submit.is-sent{opacity:1; cursor:default; border-color:var(--green); color:var(--green); background:rgba(40,184,63,.12)}
+.booking__submit.is-sent:hover{transform:none; border-color:var(--green); color:var(--green)}
+.spin{animation:spin360 .8s linear infinite}
+@keyframes spin360{to{transform:rotate(360deg)}}
 .booking__note{position:relative; text-align:center; font-size:12.5px; color:var(--muted-2); margin:16px 0 0}
+.booking__note--ok{color:var(--green); font-weight:600}
+.booking__note--err{color:var(--danger); font-weight:600}
 
 /* ---- booking modal (cute pop-down) ---- */
 .modal{position:fixed; inset:0; z-index:100000; overflow-y:auto; display:flex; align-items:flex-start; justify-content:center; padding:78px 18px 32px; background:rgba(4,6,7,.74); backdrop-filter:blur(6px); animation:modalFade .2s ease}
@@ -2207,6 +2274,7 @@ ul{margin:0;padding:0;list-style:none}
   .booking__fields{grid-template-columns:1fr}
   .booking__foot{flex-direction:column; align-items:stretch; text-align:center}
   .booking__summary{justify-content:center}
+  .booking__actions{flex-direction:column}
   .booking__submit{width:100%}
   .pricing__grid{grid-template-columns:1fr}
   .tier--featured{transform:none; order:-1}
