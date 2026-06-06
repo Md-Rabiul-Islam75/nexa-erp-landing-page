@@ -32,15 +32,24 @@
  * ============================================================================
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, createContext, useContext } from 'react'
 import {
   Wallet, ShoppingCart, PackageOpen, Boxes, Factory, Ship, Users, BadgeDollarSign,
   Building2, ClipboardList, HeartHandshake, ReceiptText, BarChart3, FileCheck2,
   ShieldCheck, Smartphone, Menu, X, Check, ChevronDown, ArrowRight, Zap,
   TrendingDown, Phone, Mail, MapPin, Quote, ScanLine, RefreshCw, Play,
   MessageCircle, CalendarClock, Calendar, Clock, User, ChevronLeft, ChevronRight,
-  Pause, Volume2, VolumeX, Maximize,
+  Pause, Volume2, VolumeX, Maximize, ArrowUp,
 } from 'lucide-react'
+
+/* Real WhatsApp brand glyph (lucide has no brand icon) */
+function WhatsAppIcon({ size = 26 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.01zM12.05 20.15h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z" />
+    </svg>
+  )
+}
 
 /* ===========================================================================
  * 1. BRAND
@@ -80,7 +89,7 @@ const NAV_LINKS = [
   { label: 'ROI', href: '#roi' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#book-demo' },
+  { label: 'Contact', href: '#contact' },
 ]
 
 /* ===========================================================================
@@ -506,16 +515,36 @@ function CountUp({ end, suffix = '', duration = 1400 }) {
 const fmtBDT = (n) =>
   '৳' + Math.round(n).toLocaleString('en-IN')
 
+/* Booking modal opener — shared via context so any CTA can trigger the popup */
+const BookingCtx = createContext(() => {})
+const useBooking = () => useContext(BookingCtx)
+
 /* ===========================================================================
  *  APP
  * ======================================================================== */
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [chatOpen, setChatOpen] = useState(false)
+  const [bookingOpen, setBookingOpen] = useState(false)
+  const openBooking = useCallback(() => { setMenuOpen(false); setBookingOpen(true) }, [])
+  const [showTop, setShowTop] = useState(false)
+  const [waOpen, setWaOpen] = useState(true)
+
+  // Contact: large screens land on the section top (heading + calendar visible);
+  // small screens (stacked layout) jump straight to the contact/calendar block.
+  const onNavClick = useCallback((e, href) => {
+    if (href !== '#contact') return
+    e.preventDefault()
+    const el = document.getElementById(window.innerWidth > 1024 ? 'book-demo' : 'contact')
+    el?.scrollIntoView({ behavior: 'smooth' })
+    setMenuOpen(false)
+  }, [])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12)
+      setShowTop(window.scrollY > 600)
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -527,8 +556,9 @@ export default function App() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  // Crisp live chat — hide Crisp's default launcher and drive it from our own
-  // animated (trembling) chat button, so we control the attention animation.
+  /* Crisp live chat — COMMENTED OUT for now. The floating button below links to
+     WhatsApp instead. To re-enable Crisp, uncomment this effect and the openChat
+     handler, set VITE_CRISP_WEBSITE_ID in .env, and swap the fab back to a button.
   useEffect(() => {
     if (!CRISP_WEBSITE_ID || document.getElementById('crisp-loader')) return
     window.$crisp = window.$crisp || []
@@ -537,22 +567,19 @@ export default function App() {
     window.$crisp.push(['on', 'chat:opened', () => setChatOpen(true)])
     window.$crisp.push(['on', 'chat:closed', () => { window.$crisp.push(['do', 'chat:hide']); setChatOpen(false) }])
     const s = document.createElement('script')
-    s.id = 'crisp-loader'
-    s.src = 'https://client.crisp.chat/l.js'
-    s.async = true
+    s.id = 'crisp-loader'; s.src = 'https://client.crisp.chat/l.js'; s.async = true
     document.head.appendChild(s)
   }, [])
-
-  const openChat = useCallback(() => {
-    if (!window.$crisp) return
-    window.$crisp.push(['do', 'chat:show'])
-    window.$crisp.push(['do', 'chat:open'])
-    setChatOpen(true)
-  }, [])
+  */
 
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
+  // Floating WhatsApp button (replaces the Crisp bubble for now)
+  const waFab = `https://wa.me/${BOOKING.whatsapp}?text=${encodeURIComponent('Hi NexaERP, I want to book a demo.')}`
+  const waDisplay = '+' + BOOKING.whatsapp.replace(/^(\d{3})(\d{4})(\d+)$/, '$1 $2 $3')
+
   return (
+    <BookingCtx.Provider value={openBooking}>
     <div className="page">
       <Styles />
       <div className="grid-bg" aria-hidden="true" />
@@ -566,14 +593,14 @@ export default function App() {
 
           <nav className="nav__links" aria-label="Primary">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="nav__link">{l.label}</a>
+              <a key={l.href} href={l.href} className="nav__link" onClick={(e) => onNavClick(e, l.href)}>{l.label}</a>
             ))}
           </nav>
 
           <div className="nav__actions">
             {/* Sign in hidden for now — restore this line when the login is ready */}
             {/* <a href="#" className="btn btn--ghost nav__signin">Sign in</a> */}
-            <a href={BRAND.demoUrl} className="btn btn--primary">Book a free demo</a>
+            <button type="button" onClick={openBooking} className="btn btn--primary">Book a free demo</button>
           </div>
 
           <button
@@ -589,9 +616,9 @@ export default function App() {
         {menuOpen && (
           <div className="nav__mobile" onClick={closeMenu}>
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="nav__mobile-link">{l.label}</a>
+              <a key={l.href} href={l.href} className="nav__mobile-link" onClick={(e) => onNavClick(e, l.href)}>{l.label}</a>
             ))}
-            <a href={BRAND.demoUrl} className="btn btn--primary nav__mobile-cta">Book a free demo</a>
+            <button type="button" onClick={openBooking} className="btn btn--primary nav__mobile-cta">Book a free demo</button>
           </div>
         )}
       </header>
@@ -617,13 +644,32 @@ export default function App() {
 
       <Footer />
 
-      {CRISP_WEBSITE_ID && !chatOpen && (
-        <button className="chat-fab" onClick={openChat} aria-label="Chat with us">
-          <span className="chat-fab__ring" aria-hidden="true" />
-          <MessageCircle size={26} aria-hidden="true" />
+      {/* Back-to-top — appears after scrolling down */}
+      {showTop && (
+        <button className="to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top">
+          <ArrowUp size={22} aria-hidden="true" />
         </button>
       )}
+
+      {/* Floating WhatsApp button — labelled pill + trembling icon (replaces Crisp) */}
+      <div className={`wa-fab ${waOpen ? '' : 'wa-fab--mini'}`}>
+        {waOpen && (
+          <button className="wa-fab__x" onClick={() => setWaOpen(false)} aria-label="Hide WhatsApp prompt">
+            <X size={13} aria-hidden="true" />
+          </button>
+        )}
+        <a className="wa-fab__link" href={waFab} target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+          <span className="wa-fab__pill"><span className="wa-fab__txt">Chat with us on WhatsApp</span><b>{waDisplay}</b></span>
+          <span className="wa-fab__circle">
+            <span className="chat-fab__ring" aria-hidden="true" />
+            <WhatsAppIcon size={28} />
+          </span>
+        </a>
+      </div>
+
+      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
     </div>
+    </BookingCtx.Provider>
   )
 }
 
@@ -644,7 +690,6 @@ function Hero() {
           {/* English sub kept in HERO.sub constant if you ever want it back */}
           <p className="hero__sub-bn bn">{HERO.subBn}</p>
           <div className="hero__ctas">
-            <a href={BRAND.demoUrl} className="btn btn--primary btn--lg">{HERO.primaryCta}<ArrowRight size={18} /></a>
             <a href="#tour" className="btn btn--outline btn--lg">{HERO.secondaryCta}</a>
           </div>
           <p className="hero__risk">{HERO.riskReversal}</p>
@@ -1254,7 +1299,7 @@ function Pricing() {
   const per = annual ? '/year' : '/month'
 
   return (
-    <section id="pricing" className="section pricing">
+    <section className="section pricing">
       <div className="container">
         <SectionHead
           kicker="Investment options"
@@ -1269,7 +1314,7 @@ function Pricing() {
           <p className="pricing__punch-en">{REFRAME.pricingPunch}</p>
         </div>
 
-        <div className="pricing__toggle" role="group" aria-label="Billing period">
+        <div id="pricing" className="pricing__toggle" role="group" aria-label="Billing period">
           <button className={!annual ? 'on' : ''} onClick={() => setAnnual(false)} aria-pressed={!annual}>Monthly</button>
           <button className={annual ? 'on' : ''} onClick={() => setAnnual(true)} aria-pressed={annual}>
             Annual <span className="pricing__save">Save 2 months</span>
@@ -1285,7 +1330,6 @@ function Pricing() {
               <p className="tier__price">{fmtBDT(priceFor(t.monthly))}<span className="tier__per">{per}</span></p>
               <p className="tier__setup">+ {fmtBDT(t.setup)} one-time setup</p>
               <p className="tier__users">{t.users}</p>
-              <a href={BRAND.demoUrl} className={`btn btn--lg tier__cta ${t.featured ? 'btn--primary' : 'btn--outline'}`}>{t.cta}</a>
               <ul className="tier__features">
                 {t.features.map((f) => (
                   <li key={f}><Check size={15} aria-hidden="true" />{f}</li>
@@ -1363,7 +1407,7 @@ function FinalCta() {
           <p className="final__risk bn">{FINAL.riskReversalBn}</p>
           <p className="final__risk-en">{FINAL.riskReversal}</p>
 
-          <div className="final__methods-wrap">
+          <div id="contact" className="final__methods-wrap">
             <p className="final__or">Prefer to talk first?</p>
             <div className="final__methods">
               <a className="final__method" href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>
@@ -1382,8 +1426,8 @@ function FinalCta() {
   )
 }
 
-/* ----------------------------------------------------- BOOKING WIDGET --- */
-function BookingWidget() {
+/* ----------------------------------------------------- BOOKING FORM --- */
+function BookingForm() {
   // "today" at midnight — the floor for selectable dates
   const today = new Date(); today.setHours(0, 0, 0, 0)
   const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + BOOKING.daysAhead)
@@ -1427,9 +1471,7 @@ function BookingWidget() {
   const waHref = `https://wa.me/${BOOKING.whatsapp}?text=${encodeURIComponent(message)}`
 
   return (
-      <div className="booking">
-        <div className="booking__glow" aria-hidden="true" />
-
+      <>
         <div className="booking__grid">
           {/* STEP 1 — date */}
           <div className="booking__col">
@@ -1516,7 +1558,43 @@ function BookingWidget() {
           </a>
         </div>
         <p className="booking__note">No payment now · We’ll confirm your slot on WhatsApp within minutes.</p>
+      </>
+  )
+}
+
+/* Booking card (used inline in the final section) */
+function BookingWidget() {
+  return (
+    <div className="booking">
+      <div className="booking__glow" aria-hidden="true" />
+      <BookingForm />
+    </div>
+  )
+}
+
+/* Cute pop-down modal with the booking form — opened by "Book a free demo" CTAs */
+function BookingModal({ open, onClose }) {
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [open, onClose])
+
+  if (!open) return null
+  return (
+    <div className="modal" role="dialog" aria-modal="true" aria-label="Book your demo" onClick={onClose}>
+      <div className="modal__panel" onClick={(e) => e.stopPropagation()}>
+        <button className="modal__close" onClick={onClose} aria-label="Close"><X size={20} /></button>
+        <div className="modal__head">
+          <span className="booking__badge"><CalendarClock size={15} aria-hidden="true" /> Book your free demo</span>
+          <h3 className="modal__title bn">{BOOKING.titleBn}</h3>
+          <p className="modal__title-en">{BOOKING.title}</p>
+        </div>
+        <BookingForm />
       </div>
+    </div>
   )
 }
 
@@ -2057,6 +2135,32 @@ ul{margin:0;padding:0;list-style:none}
 .booking__submit.is-disabled:hover{background:var(--green); transform:none}
 .booking__note{position:relative; text-align:center; font-size:12.5px; color:var(--muted-2); margin:16px 0 0}
 
+/* ---- booking modal (cute pop-down) ---- */
+.modal{position:fixed; inset:0; z-index:100000; overflow-y:auto; display:flex; align-items:flex-start; justify-content:center; padding:78px 18px 32px; background:rgba(4,6,7,.74); backdrop-filter:blur(6px); animation:modalFade .2s ease}
+.modal__panel{position:relative; width:100%; max-width:660px; background:linear-gradient(180deg,var(--bg-2),var(--bg)); border:1px solid var(--line-2); border-radius:20px; padding:26px; box-shadow:0 40px 120px rgba(0,0,0,.7); animation:modalDrop .28s cubic-bezier(.2,.7,.3,1)}
+.modal__close{position:absolute; top:14px; right:14px; width:34px; height:34px; display:grid; place-items:center; border:1px solid var(--line); background:var(--bg-3); color:var(--muted); border-radius:9px; cursor:pointer; transition:color .2s, border-color .2s; z-index:2}
+.modal__close:hover{color:var(--ink); border-color:var(--green)}
+.modal__head{text-align:center; margin-bottom:22px}
+.modal__title{margin:12px 0 0; font-weight:700; font-size:clamp(19px,2.4vw,24px); line-height:1.35; color:var(--ink)}
+.modal__title-en{margin:3px 0 0; font-family:var(--font-display); font-weight:600; font-size:13px; color:var(--muted-2)}
+@keyframes modalFade{from{opacity:0}}
+@keyframes modalDrop{from{opacity:0; transform:translateY(-28px) scale(.98)}}
+@media (max-width:520px){ .modal{padding:18px 12px 24px} .modal__panel{padding:20px 16px} }
+
+/* tighter vertical rhythm inside the modal only — keeps the popup compact */
+.modal__panel{padding:22px}
+.modal__head{margin-bottom:16px}
+.modal__head .booking__badge{margin-bottom:10px}
+.modal .booking__grid{margin-bottom:16px}
+.modal .booking__form{margin-bottom:16px}
+.modal .booking__step{margin-bottom:10px}
+.modal .cal{padding:11px}
+.modal .cal__bar{margin-bottom:9px}
+.modal .slot{padding:9px 10px}
+.modal .field input{padding:10px 0}
+.modal .booking__foot{padding-top:15px}
+.modal .booking__note{margin-top:11px}
+
 /* ---- footer ---- */
 .footer{border-top:1px solid var(--line); padding:64px 0 32px; background:var(--bg)}
 .footer__inner{display:grid; grid-template-columns:1.3fr 2fr; gap:40px}
@@ -2121,19 +2225,17 @@ ul{margin:0;padding:0;list-style:none}
 }
 
 /* ---- custom trembling chat button (drives Crisp) ---- */
-.chat-fab{
-  position:fixed; right:22px; bottom:22px; z-index:999990;
-  width:58px; height:58px; border-radius:50%; border:none; cursor:pointer;
-  background:var(--green); color:#04210b; display:grid; place-items:center;
-  box-shadow:0 10px 30px rgba(40,184,63,.45), 0 4px 12px rgba(0,0,0,.4);
-  animation:fabShake 3.2s ease-in-out infinite;
-  transition:transform .2s, background .2s;
-}
-.chat-fab:hover{background:var(--green-hi); transform:scale(1.07); animation-play-state:paused}
-.chat-fab__ring{
-  position:absolute; inset:0; border-radius:50%; border:2px solid var(--green);
-  animation:fabPulse 2.4s ease-out infinite; pointer-events:none;
-}
+/* floating WhatsApp button — labelled pill + trembling round icon */
+.wa-fab{position:fixed; right:22px; bottom:22px; z-index:999990; display:flex; align-items:center}
+.wa-fab__link{display:flex; align-items:center; gap:11px; text-decoration:none}
+.wa-fab__pill{display:flex; align-items:center; gap:8px; background:#fff; color:#0d1b12; font-weight:600; font-size:13.5px; padding:11px 16px; border-radius:999px; white-space:nowrap; box-shadow:0 8px 26px rgba(0,0,0,.4)}
+.wa-fab__pill b{color:#1faf38; font-weight:700}
+.wa-fab__circle{position:relative; width:58px; height:58px; border-radius:50%; background:#25D366; color:#fff; display:grid; place-items:center; box-shadow:0 10px 30px rgba(37,211,102,.5), 0 4px 12px rgba(0,0,0,.4); animation:fabShake 3.2s ease-in-out infinite; transition:transform .2s}
+.wa-fab__link:hover .wa-fab__circle{transform:scale(1.07); animation-play-state:paused}
+.wa-fab__x{position:absolute; top:-7px; right:-7px; z-index:3; width:22px; height:22px; border-radius:50%; background:#1c2128; color:#cfd6d2; border:1px solid var(--line-2); display:grid; place-items:center; cursor:pointer; transition:color .2s, border-color .2s}
+.wa-fab__x:hover{color:#fff; border-color:var(--muted)}
+.wa-fab--mini .wa-fab__pill{display:none}
+.chat-fab__ring{position:absolute; inset:0; border-radius:50%; border:2px solid #25D366; animation:fabPulse 2.4s ease-out infinite; pointer-events:none}
 @keyframes fabPulse{0%{transform:scale(1); opacity:.55}80%,100%{transform:scale(1.7); opacity:0}}
 @keyframes fabShake{
   0%,11%,100%{transform:rotate(0)}
@@ -2144,8 +2246,26 @@ ul{margin:0;padding:0;list-style:none}
   7.5%{transform:rotate(-4deg)}
   9%{transform:rotate(2deg)}
 }
-@media (max-width:520px){
-  .chat-fab{right:16px; bottom:16px; width:54px; height:54px}
+/* back-to-top button — sits just above the WhatsApp fab */
+.to-top{
+  position:fixed; right:24px; bottom:92px; z-index:999985;
+  width:46px; height:46px; border-radius:50%; cursor:pointer;
+  background:var(--bg-3); color:var(--ink); border:1px solid var(--line-2);
+  display:grid; place-items:center; box-shadow:0 8px 22px rgba(0,0,0,.45);
+  transition:transform .2s, border-color .2s, color .2s, background .2s;
+  animation:rise .3s ease both;
+}
+.to-top:hover{border-color:var(--green); color:var(--green); transform:translateY(-3px)}
+
+/* offset scroll targets so the sticky nav doesn't cover them */
+#pricing,#contact,#book-demo{scroll-margin-top:88px}
+
+@media (max-width:600px){
+  .wa-fab__txt{display:none}               /* drop the long label on phones, keep the number */
+  .wa-fab__pill{font-size:12px; padding:9px 12px; gap:0}
+  .wa-fab{right:16px; bottom:16px}
+  .wa-fab__circle{width:52px; height:52px}
+  .to-top{right:18px; bottom:80px; width:42px; height:42px}
 }
 
 @media (prefers-reduced-motion:reduce){
