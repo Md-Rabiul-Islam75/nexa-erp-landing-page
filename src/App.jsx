@@ -160,12 +160,13 @@ const HERO_VIDEO = {
  *     to show the styled placeholder). e.g. https://www.youtube.com/embed/XXXX
  * ======================================================================== */
 const VIDEO = {
-  kicker: 'See it in 2 minutes',
+  kicker: 'See it in 5 minutes',
   heading: 'A guided tour of NexaERP.',
   introBn: 'একটা transaction কীভাবে finance, inventory, VAT আর dashboard-এ ছড়িয়ে যায় দেখুন — পুরো business এক system-এ।',
   intro: 'Watch one transaction flow through finance, inventory, VAT and the dashboard — the whole business, in one system.',
-  embedUrl: '',
-  poster: { duration: '2:14', caption: 'NexaERP product tour' },
+  embedUrl: 'https://www.youtube.com/embed/Ntc1QHsdP3c?rel=0',
+  thumbnail: 'https://img.youtube.com/vi/Ntc1QHsdP3c/maxresdefault.jpg',
+  poster: { duration: '5:00', caption: 'NexaERP product tour' },
 }
 
 /* ===========================================================================
@@ -1028,15 +1029,19 @@ function Video() {
               onClick={() => hasVideo && setPlaying(true)}
               aria-label={hasVideo ? 'Play product tour' : 'Product tour video — add an embed URL in the VIDEO constant'}
               style={{
-                backgroundImage: "linear-gradient(160deg,var(--bg-2),var(--bg)), url('/images/nexa-erp-dashboard.png')",
+                backgroundImage: hasVideo
+                  ? `linear-gradient(160deg,rgba(10,15,12,.35),rgba(10,15,12,.55)), url('${VIDEO.thumbnail}')`
+                  : "linear-gradient(160deg,var(--bg-2),var(--bg)), url('/images/nexa-erp-dashboard.png')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
-              {/* Faux dashboard backdrop so the poster looks alive even before a real video is added */}
-              <div className="video__poster-bg" aria-hidden="true">
-                <span /><span /><span /><span /><span /><span />
-              </div>
+              {/* Faux dashboard backdrop — only when no real video is set yet */}
+              {!hasVideo && (
+                <div className="video__poster-bg" aria-hidden="true">
+                  <span /><span /><span /><span /><span /><span />
+                </div>
+              )}
               <span className="video__play"><Play size={26} fill="currentColor" aria-hidden="true" /></span>
               <span className="video__meta">{VIDEO.poster.caption} · {VIDEO.poster.duration}</span>
               {!hasVideo && <span className="video__hint">Paste a YouTube/Vimeo embed URL in the VIDEO constant to go live</span>}
