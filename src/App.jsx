@@ -41,6 +41,7 @@ import {
   MessageCircle, CalendarClock, Calendar, Clock, User, ChevronLeft, ChevronRight,
   Pause, Volume2, VolumeX, Maximize, ArrowUp,
 } from 'lucide-react'
+import { trackLead, trackContact } from './lib/pixel'
 
 /* Real WhatsApp brand glyph (lucide has no brand icon) */
 function WhatsAppIcon({ size = 26 }) {
@@ -662,7 +663,7 @@ export default function App() {
             <X size={13} aria-hidden="true" />
           </button>
         )}
-        <a className="wa-fab__link" href={waFab} target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+        <a className="wa-fab__link" href={waFab} target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp" onClick={() => trackContact('whatsapp-fab')}>
           <span className="wa-fab__pill"><span className="wa-fab__txt">Chat with us on WhatsApp</span><b>{waDisplay}</b></span>
           <span className="wa-fab__circle">
             <span className="chat-fab__ring" aria-hidden="true" />
@@ -1418,10 +1419,10 @@ function FinalCta() {
           <div id="contact" className="final__methods-wrap">
             <p className="final__or">Prefer to talk first?</p>
             <div className="final__methods">
-              <a className="final__method" href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>
+              <a className="final__method" href={`tel:${BRAND.phone.replace(/\s/g, '')}`} onClick={() => trackContact('phone')}>
                 <Phone size={16} aria-hidden="true" /> {BRAND.phone}
               </a>
-              <a className="final__method" href={`mailto:${BRAND.email}`}>
+              <a className="final__method" href={`mailto:${BRAND.email}`} onClick={() => trackContact('email')}>
                 <Mail size={16} aria-hidden="true" /> {BRAND.email}
               </a>
             </div>
@@ -1514,6 +1515,7 @@ Email: ${email.trim()}`
       })
       const data = await res.json()
       setEmailState(data.success ? 'sent' : 'error')
+      if (data.success) trackLead('email')
     } catch {
       setEmailState('error')
     }
@@ -1602,7 +1604,7 @@ Email: ${email.trim()}`
               target="_blank"
               rel="noopener noreferrer"
               aria-disabled={!validWa}
-              onClick={(e) => { if (!validWa) e.preventDefault() }}
+              onClick={(e) => { if (!validWa) { e.preventDefault(); return } trackLead('whatsapp') }}
             >
               <MessageCircle size={18} aria-hidden="true" /> Confirm on WhatsApp
             </a>
