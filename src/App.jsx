@@ -41,7 +41,7 @@ import {
   MessageCircle, CalendarClock, Calendar, Clock, User, ChevronLeft, ChevronRight,
   Pause, Volume2, VolumeX, Maximize, ArrowUp,
 } from 'lucide-react'
-import { trackLead, trackContact } from './lib/pixel'
+import { trackLead, trackContact, trackBookingIntent } from './lib/pixel'
 
 /* Real WhatsApp brand glyph (lucide has no brand icon) */
 function WhatsAppIcon({ size = 26 }) {
@@ -531,7 +531,13 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [bookingOpen, setBookingOpen] = useState(false)
-  const openBooking = useCallback(() => { setMenuOpen(false); setBookingOpen(true) }, [])
+  // Single entry point for the booking modal — instrumenting here covers both
+  // the desktop and mobile nav CTAs without duplicating the tracking call.
+  const openBooking = useCallback(() => {
+    setMenuOpen(false)
+    setBookingOpen(true)
+    trackBookingIntent('nav-modal')
+  }, [])
   const [showTop, setShowTop] = useState(false)
   const [waOpen, setWaOpen] = useState(true)
 
@@ -1170,7 +1176,7 @@ function RoiCalculator() {
             <p className="roi__monthly">{fmtBDT(monthly)}<span>/month</span></p>
             <p className="roi__yearly bn">≈ {fmtBDT(yearly)} বছরে<span className="en-sub">≈ {fmtBDT(yearly)} a year</span></p>
             <p className="roi__assume bn">{ROI.assumptionNoteBn}<span className="en-sub">{ROI.assumptionNote}</span></p>
-            <a href={BRAND.demoUrl} className="btn btn--primary btn--lg roi__cta">Claim this <ArrowRight size={18} /></a>
+            <a href={BRAND.demoUrl} className="btn btn--primary btn--lg roi__cta" onClick={() => trackBookingIntent('roi-claim')}>Claim this <ArrowRight size={18} /></a>
             <p className="roi__risk bn">30 মিনিটের demo-তে আপনার নিজের data দিয়ে আসল number দেখুন।<span className="en-sub">See your real number on your own data in a 30-min demo.</span></p>
           </div>
         </div>
@@ -1694,7 +1700,7 @@ function Footer() {
             <a href="#">About ASL</a>
             <a href="#problem">Why NexaERP</a>
             <a href={`mailto:${BRAND.email}`}>Contact</a>
-            <a href="#book-demo">Book a demo</a>
+            <a href="#book-demo" onClick={() => trackBookingIntent('footer-link')}>Book a demo</a>
           </div>
           <div className="footer__col">
             <h4>Compliance</h4>

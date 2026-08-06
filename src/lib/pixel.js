@@ -17,3 +17,9 @@ export function trackLead(channel) {
 export function trackContact(channel) {
   track('Contact', { content_category: channel })
 }
+
+/* Someone reached the booking form — the high-volume intent signal Meta can
+   actually train on, since completed bookings are too rare on their own. */
+export function trackBookingIntent(source) {
+  track('InitiateCheckout', { content_name: 'NexaERP demo form', content_category: source })
+}
