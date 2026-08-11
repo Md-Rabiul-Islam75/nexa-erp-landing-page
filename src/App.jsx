@@ -41,7 +41,7 @@ import {
   MessageCircle, CalendarClock, Calendar, Clock, User, ChevronLeft, ChevronRight,
   Pause, Volume2, VolumeX, Maximize, ArrowUp,
 } from 'lucide-react'
-import { trackLead, trackContact, trackBookingIntent } from './lib/pixel'
+import { trackBookingIntent, trackBookingConfirmed, trackContact } from './lib/pixel'
 
 /* Real WhatsApp brand glyph (lucide has no brand icon) */
 function WhatsAppIcon({ size = 26 }) {
@@ -1521,7 +1521,7 @@ Email: ${email.trim()}`
       })
       const data = await res.json()
       setEmailState(data.success ? 'sent' : 'error')
-      if (data.success) trackLead('email')
+      if (data.success) trackBookingConfirmed('email')
     } catch {
       setEmailState('error')
     }
@@ -1610,7 +1610,7 @@ Email: ${email.trim()}`
               target="_blank"
               rel="noopener noreferrer"
               aria-disabled={!validWa}
-              onClick={(e) => { if (!validWa) { e.preventDefault(); return } trackLead('whatsapp') }}
+              onClick={(e) => { if (!validWa) { e.preventDefault(); return } trackBookingConfirmed('whatsapp') }}
             >
               <MessageCircle size={18} aria-hidden="true" /> Confirm on WhatsApp
             </a>
